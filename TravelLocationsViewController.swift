@@ -9,15 +9,67 @@
 import UIKit
 import MapKit
 
-class TravelLocationsViewController: UIViewController {
+class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var mapView: MKMapView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        mapView.delegate = self
+        
+        let longGestureRecognizer = UILongPressGestureRecognizer(target: self, action: "addAnnotation:")
+        longGestureRecognizer.minimumPressDuration = 1.5
+        mapView.addGestureRecognizer(longGestureRecognizer)
+        
     }
     
     
+}
+
+
+extension TravelLocationsViewController {
+    func addAnnotation(gestureRecognizer : UIGestureRecognizer) {
+        
+        if gestureRecognizer.state == .Began {
+            let touchLocation = gestureRecognizer.locationInView(mapView)
+            let mapCoordinates = mapView.convertPoint(touchLocation, toCoordinateFromView: mapView)
+            print(mapCoordinates)
+            
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = mapCoordinates
+            annotation.title = "Maybe put number of photos or something here..."
+            mapView.addAnnotation(annotation)
+        }
+    }
+    
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+        print("view for annotation")
+        
+        let reuseId = "pin"
+        
+        var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView!.canShowCallout = true
+            pinView!.pinTintColor = UIColor.greenColor()
+            pinView!.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure)
+        } else {
+            pinView!.annotation = annotation
+        }
+        
+        return pinView
+    }
+
+    
+    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        print("pin tapped")
+    }
+    
+    
+    func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
+        print("did select")
+        let photoViewController = storyboard?.instantiateViewControllerWithIdentifier("PhotoAlbum") as! PhotoAlbumViewController
+        navigationController?.pushViewController(photoViewController, animated: true)
+    }
 }
