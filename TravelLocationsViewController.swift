@@ -25,6 +25,17 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
     }
     
     
+    func downloadFlickrPhotos(withLatitude latitude: Double, andLongitude longitude: Double) {
+        VTClient.sharedInstance.getPhotosFromFlick(latitude, lon: longitude, page: 1) { (success, photoResults, errorString) -> Void in
+            if success {
+                for photo in photoResults! {
+                    print(photo["url_m"]!)
+                }
+            }
+        }
+    }
+    
+    
 }
 
 
@@ -34,7 +45,9 @@ extension TravelLocationsViewController {
         if gestureRecognizer.state == .Began {
             let touchLocation = gestureRecognizer.locationInView(mapView)
             let mapCoordinates = mapView.convertPoint(touchLocation, toCoordinateFromView: mapView)
-            print(mapCoordinates)
+            print(mapCoordinates.latitude)
+            print(mapCoordinates.longitude)
+            downloadFlickrPhotos(withLatitude: mapCoordinates.latitude, andLongitude: mapCoordinates.longitude)
             
             let annotation = MKPointAnnotation()
             annotation.coordinate = mapCoordinates

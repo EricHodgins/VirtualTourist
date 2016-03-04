@@ -20,6 +20,7 @@
 		7A13B9BC1C86993500B506A3 /* PhotoAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A13B9BB1C86993500B506A3 /* PhotoAlbumViewController.swift */; };
 		7A159A441C87FA5C00B178AA /* VTClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A159A431C87FA5C00B178AA /* VTClient.swift */; };
 		7A159A471C87FD9F00B178AA /* VTConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A159A461C87FD9F00B178AA /* VTConstants.swift */; };
+		7A159A491C88039900B178AA /* VTConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A159A481C88039900B178AA /* VTConvenience.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		7A13B9BB1C86993500B506A3 /* PhotoAlbumViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoAlbumViewController.swift; sourceTree = "<group>"; };
 		7A159A431C87FA5C00B178AA /* VTClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VTClient.swift; sourceTree = "<group>"; };
 		7A159A461C87FD9F00B178AA /* VTConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = VTConstants.swift; path = ../VTConstants.swift; sourceTree = "<group>"; };
+		7A159A481C88039900B178AA /* VTConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = VTConvenience.swift; path = ../VTConvenience.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,9 +114,9 @@
 			isa = PBXGroup;
 			children = (
 				7A13B9811C8690B300B506A3 /* AppDelegate.swift */,
+				7A13B9B21C8690EE00B506A3 /* CoreDataStackManager.swift */,
 				7A159A451C87FC6100B178AA /* Model */,
 				7A13B9B41C86942B00B506A3 /* TravelLocationsViewController.swift */,
-				7A13B9B21C8690EE00B506A3 /* CoreDataStackManager.swift */,
 				7A13B9BB1C86993500B506A3 /* PhotoAlbumViewController.swift */,
 				7A13B9851C8690B300B506A3 /* Main.storyboard */,
 				7A13B98B1C8690B300B506A3 /* Assets.xcassets */,
@@ -156,6 +158,7 @@
 			children = (
 				7A159A431C87FA5C00B178AA /* VTClient.swift */,
 				7A159A461C87FD9F00B178AA /* VTConstants.swift */,
+				7A159A481C88039900B178AA /* VTConvenience.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -301,6 +304,7 @@
 				7A159A471C87FD9F00B178AA /* VTConstants.swift in Sources */,
 				7A13B9821C8690B300B506A3 /* AppDelegate.swift in Sources */,
 				7A13B98A1C8690B300B506A3 /* VirtualTourist.xcdatamodeld in Sources */,
+				7A159A491C88039900B178AA /* VTConvenience.swift in Sources */,
 				7A13B9BC1C86993500B506A3 /* PhotoAlbumViewController.swift in Sources */,
 				7A13B9B51C86942B00B506A3 /* TravelLocationsViewController.swift in Sources */,
 			);

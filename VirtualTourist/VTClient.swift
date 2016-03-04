@@ -37,4 +37,44 @@ class VTClient {
         completionHandler(result: parsedResult, error: nil)
     }
     
+    
+    class func escapedParameters(parameters: [String : AnyObject]) -> String {
+        var urlVars = [String]()
+        
+        for (key, value) in parameters {
+            
+            let stringValue = "\(value)"
+            
+            let escapedValue = stringValue.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())
+            urlVars += [key + "=\(escapedValue!)"]
+            
+        }
+        
+        if !urlVars.isEmpty {
+            return "" + urlVars.joinWithSeparator("&")
+        } else {
+            return ""
+        }
+    }
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
