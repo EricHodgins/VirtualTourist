@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A1336641C894BC200934E2E /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1336631C894BC200934E2E /* CustomCollectionViewCell.swift */; };
 		7A13B9821C8690B300B506A3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A13B9811C8690B300B506A3 /* AppDelegate.swift */; };
 		7A13B9871C8690B300B506A3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A13B9851C8690B300B506A3 /* Main.storyboard */; };
 		7A13B98A1C8690B300B506A3 /* VirtualTourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7A13B9881C8690B300B506A3 /* VirtualTourist.xcdatamodeld */; };
@@ -41,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7A1336631C894BC200934E2E /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
 		7A13B97E1C8690B300B506A3 /* VirtualTourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualTourist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A13B9811C8690B300B506A3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7A13B9861C8690B300B506A3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 				7A159A451C87FC6100B178AA /* Model */,
 				7A13B9B41C86942B00B506A3 /* TravelLocationsViewController.swift */,
 				7A13B9BB1C86993500B506A3 /* PhotoAlbumViewController.swift */,
+				7A1336631C894BC200934E2E /* CustomCollectionViewCell.swift */,
 				7A13B9851C8690B300B506A3 /* Main.storyboard */,
 				7A13B98B1C8690B300B506A3 /* Assets.xcassets */,
 				7A13B98D1C8690B300B506A3 /* LaunchScreen.storyboard */,
@@ -300,6 +303,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A159A441C87FA5C00B178AA /* VTClient.swift in Sources */,
+				7A1336641C894BC200934E2E /* CustomCollectionViewCell.swift in Sources */,
 				7A13B9B31C8690EE00B506A3 /* CoreDataStackManager.swift in Sources */,
 				7A159A471C87FD9F00B178AA /* VTConstants.swift in Sources */,
 				7A13B9821C8690B300B506A3 /* AppDelegate.swift in Sources */,

@@ -78,14 +78,30 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="photoCell" id="084-p1-Mln">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="photoCell" id="084-p1-Mln" customClass="CustomCollectionViewCell" customModule="VirtualTourist" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="134" height="125"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="134" height="125"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4FV-Lq-Tng">
+                                                    <rect key="frame" x="0.0" y="0.0" width="134" height="125"/>
+                                                    <color key="backgroundColor" red="0.19215686269999999" green="0.2901960784" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
+                                                </view>
+                                            </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailingMargin" secondItem="4FV-Lq-Tng" secondAttribute="trailing" constant="-8" id="1QW-k2-VTf"/>
+                                            <constraint firstAttribute="bottomMargin" secondItem="4FV-Lq-Tng" secondAttribute="bottom" constant="-8" id="Cn5-Lk-7CA"/>
+                                            <constraint firstItem="4FV-Lq-Tng" firstAttribute="leading" secondItem="084-p1-Mln" secondAttribute="leadingMargin" constant="-8" id="Qgo-gc-KvI"/>
+                                            <constraint firstItem="4FV-Lq-Tng" firstAttribute="top" secondItem="084-p1-Mln" secondAttribute="topMargin" constant="-8" id="qtU-gL-52v"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="view" destination="4FV-Lq-Tng" id="58e-Sz-rnE"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
@@ -106,6 +122,10 @@
                             <constraint firstItem="uYl-ou-piq" firstAttribute="top" secondItem="emm-Rf-Oms" secondAttribute="bottom" constant="-39" id="zot-M5-4mA"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="collectionView" destination="v6F-dY-d5g" id="JPj-b7-pha"/>
+                        <outlet property="flowLayout" destination="QUB-bl-hAy" id="oon-ha-548"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BEn-qf-xaY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
