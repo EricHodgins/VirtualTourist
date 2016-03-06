@@ -12,6 +12,7 @@ import MapKit
 class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var mapView: MKMapView!
+    var finishedDraggingMapPin : Bool = true
     
     var urlStrings = [String]()
 
@@ -66,9 +67,11 @@ extension TravelLocationsViewController {
         var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView!.animatesDrop = true
+            pinView!.draggable = true
             pinView!.canShowCallout = true
             pinView!.pinTintColor = UIColor.blueColor()
-            pinView!.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure)
+            pinView!.rightCalloutAccessoryView = UIButton(type: .InfoLight)
         } else {
             pinView!.annotation = annotation
         }
@@ -83,9 +86,22 @@ extension TravelLocationsViewController {
     
     
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
-        print("did select")
-        let photoViewController = storyboard?.instantiateViewControllerWithIdentifier("PhotoAlbum") as! PhotoAlbumViewController
-        photoViewController.urlStrings = urlStrings
-        navigationController?.pushViewController(photoViewController, animated: true)
+        
+        if finishedDraggingMapPin {
+            let photoViewController = storyboard?.instantiateViewControllerWithIdentifier("PhotoAlbum") as! PhotoAlbumViewController
+            photoViewController.urlStrings = urlStrings
+            navigationController?.pushViewController(photoViewController, animated: true)
+        }
+    }
+    
+    
+    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, didChangeDragState newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
+
+        if newState == .Starting {
+            finishedDraggingMapPin = false
+        } else if newState == .Ending || newState == .Canceling {
+            view.dragState = .None
+            finishedDraggingMapPin = true
+        }
     }
 }

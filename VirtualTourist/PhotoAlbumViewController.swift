@@ -8,6 +8,8 @@
 
 import UIKit
 
+private let cellSpacing: CGFloat = 1
+
 class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
 
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
@@ -21,8 +23,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         collectionView.delegate = self
         collectionView.dataSource = self
         
-        
-        print(urlStrings)
+        print("number of photos: \(urlStrings.count)")
     }
     
     override func viewDidLayoutSubviews() {
@@ -30,14 +31,12 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     func adjustCellDimensions() {
-        print(collectionView.frame.size.width)
-        print(view.frame.size.width)
-
+        //TODO: Add check to find device orientation
         
-        let dimension = ((collectionView.frame.width) - 2) / 3
+        let dimension = ((collectionView.frame.width) - (2 * cellSpacing)) / 3
         flowLayout.itemSize = CGSize(width: dimension, height: dimension)
-        flowLayout.minimumLineSpacing = 1
-        flowLayout.minimumInteritemSpacing = 1
+        flowLayout.minimumLineSpacing = cellSpacing
+        flowLayout.minimumInteritemSpacing = cellSpacing
         
     }
 
