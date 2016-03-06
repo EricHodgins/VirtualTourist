@@ -91,6 +91,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7A0AFC291C8C0D40007DD6D2 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7A1336631C894BC200934E2E /* CustomCollectionViewCell.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		7A0AFC2A1C8C0D73007DD6D2 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				7A13B9B41C86942B00B506A3 /* TravelLocationsViewController.swift */,
+				7A13B9BB1C86993500B506A3 /* PhotoAlbumViewController.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
 		7A13B9751C8690B300B506A3 = {
 			isa = PBXGroup;
 			children = (
@@ -118,10 +135,9 @@
 				7A13B9811C8690B300B506A3 /* AppDelegate.swift */,
 				7A13B9B21C8690EE00B506A3 /* CoreDataStackManager.swift */,
 				7A159A451C87FC6100B178AA /* Model */,
-				7A13B9B41C86942B00B506A3 /* TravelLocationsViewController.swift */,
-				7A13B9BB1C86993500B506A3 /* PhotoAlbumViewController.swift */,
+				7A0AFC291C8C0D40007DD6D2 /* View */,
+				7A0AFC2A1C8C0D73007DD6D2 /* Controller */,
 				7A0AFC231C8B9C2A007DD6D2 /* Main.storyboard */,
-				7A1336631C894BC200934E2E /* CustomCollectionViewCell.swift */,
 				7A13B98B1C8690B300B506A3 /* Assets.xcassets */,
 				7A13B98D1C8690B300B506A3 /* LaunchScreen.storyboard */,
 				7A13B9901C8690B300B506A3 /* Info.plist */,

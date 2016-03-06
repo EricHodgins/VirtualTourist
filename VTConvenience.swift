@@ -50,7 +50,6 @@ extension VTClient {
     func taskForFlickrGETPhotos(method: String, parameters : [String : AnyObject], completionHandler: (results: AnyObject!, error: NSError?) -> Void) -> NSURLSessionTask {
         
         let urlString : String = VTClient.Constants.FLICKR_BASE_URL + "?" + method + "&" + VTClient.escapedParameters(parameters)
-        print(urlString)
         let url = NSURL(string: urlString)!
         
         let request = NSURLRequest(URL: url)

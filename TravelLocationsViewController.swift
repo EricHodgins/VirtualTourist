@@ -9,15 +9,20 @@
 import UIKit
 import MapKit
 
+
 class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
     
+    @IBOutlet weak var deletePinsView: UIView!
     @IBOutlet weak var mapView: MKMapView!
     var finishedDraggingMapPin : Bool = true
+    var originalFrame = CGRect()
+    var pushed : Bool = false
     
     var urlStrings = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        originalFrame = self.view.frame
         
         mapView.delegate = self
         
@@ -38,6 +43,24 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
             }
         }
     }
+    
+    
+    @IBAction func editButtonPressed(sender: AnyObject) {
+
+        if !pushed {
+            let editFrame = CGRectMake(view.frame.origin.x, view.frame.origin.y - deletePinsView.frame.height, view.frame.width, view.frame.height)
+            UIView.animateWithDuration(0.3) { () -> Void in
+                self.view.frame = editFrame
+            }
+        } else {
+        
+            UIView.animateWithDuration(0.3) { () -> Void in
+                self.view.frame = self.originalFrame
+            }
+        }
+        
+        pushed = !pushed
+    }
 
 }
 
@@ -48,8 +71,7 @@ extension TravelLocationsViewController {
         if gestureRecognizer.state == .Began {
             let touchLocation = gestureRecognizer.locationInView(mapView)
             let mapCoordinates = mapView.convertPoint(touchLocation, toCoordinateFromView: mapView)
-            print(mapCoordinates.latitude)
-            print(mapCoordinates.longitude)
+            print(mapCoordinates)
             downloadFlickrPhotos(withLatitude: mapCoordinates.latitude, andLongitude: mapCoordinates.longitude)
             
             let annotation = MKPointAnnotation()
@@ -96,12 +118,15 @@ extension TravelLocationsViewController {
     
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, didChangeDragState newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
-
+        
+        print(view.annotation?.coordinate)
+        
         if newState == .Starting {
             finishedDraggingMapPin = false
         } else if newState == .Ending || newState == .Canceling {
             view.dragState = .None
             finishedDraggingMapPin = true
+            downloadFlickrPhotos(withLatitude: (view.annotation?.coordinate.latitude)!, andLongitude: (view.annotation?.coordinate.longitude)!)
         }
     }
 }

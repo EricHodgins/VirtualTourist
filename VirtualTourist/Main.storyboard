@@ -21,17 +21,45 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Ka5-MG-UdH">
                                 <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                             </mapView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GUX-UY-khQ">
+                                <rect key="frame" x="0.0" y="600" width="600" height="71"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap Pin to Delete" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tyx-mn-qse">
+                                        <rect key="frame" x="213" y="25" width="152" height="24"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="1" green="0.238411863" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="71" id="J5o-yD-Fl7"/>
+                                    <constraint firstItem="Tyx-mn-qse" firstAttribute="centerY" secondItem="GUX-UY-khQ" secondAttribute="centerY" constant="1.5" id="MXa-Po-eTy"/>
+                                    <constraint firstItem="Tyx-mn-qse" firstAttribute="centerX" secondItem="GUX-UY-khQ" secondAttribute="centerX" constant="-11" id="bLz-A7-ZgP"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="GUX-UY-khQ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="B6b-UJ-Kqe"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Ka5-MG-UdH" secondAttribute="bottom" id="FkM-4V-D2N"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="GUX-UY-khQ" secondAttribute="bottom" constant="-71" id="KlI-1C-pvd"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="GUX-UY-khQ" secondAttribute="trailing" constant="-20" id="OvZ-98-5av"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Ka5-MG-UdH" secondAttribute="trailing" constant="-20" id="VOn-ux-uc3"/>
                             <constraint firstItem="Ka5-MG-UdH" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="ayT-Xu-pNY"/>
                             <constraint firstItem="Ka5-MG-UdH" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="unz-l3-Z2g"/>
+                            <constraint firstItem="GUX-UY-khQ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="wur-ij-syV"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Virtual Tourist" id="ItT-km-qtL"/>
+                    <navigationItem key="navigationItem" title="Virtual Tourist" id="ItT-km-qtL">
+                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="nRO-rw-bym">
+                            <connections>
+                                <action selector="editButtonPressed:" destination="BYZ-38-t0r" id="XGC-OE-nmJ"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
+                        <outlet property="deletePinsView" destination="GUX-UY-khQ" id="rPI-6a-E1M"/>
                         <outlet property="mapView" destination="Ka5-MG-UdH" id="LrS-ao-HST"/>
                         <segue destination="JIV-n5-vqV" kind="show" identifier="Photos" id="7yx-F4-kDm"/>
                     </connections>
