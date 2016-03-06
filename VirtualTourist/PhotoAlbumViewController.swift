@@ -13,24 +13,31 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var collectionView: UICollectionView!
     
+    var urlStrings = [String]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         collectionView.delegate = self
         collectionView.dataSource = self
         
+        
+        print(urlStrings)
+    }
+    
+    override func viewDidLayoutSubviews() {
         adjustCellDimensions()
     }
     
     func adjustCellDimensions() {
+        print(collectionView.frame.size.width)
+        print(view.frame.size.width)
+
         
-        print("layoutsubview")
-        
-        let dimension = (view.frame.size.width - (2 * 3)) / 3
-        
-        flowLayout.minimumLineSpacing = 3
-        flowLayout.minimumInteritemSpacing = 3
-        flowLayout.itemSize = CGSizeMake(dimension, dimension)
+        let dimension = ((collectionView.frame.width) - 2) / 3
+        flowLayout.itemSize = CGSize(width: dimension, height: dimension)
+        flowLayout.minimumLineSpacing = 1
+        flowLayout.minimumInteritemSpacing = 1
         
     }
 
@@ -44,11 +51,28 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 24
+        return urlStrings.count
+    }
+    
+    func configureCell(cell: CustomCollectionViewCell, imageURL: String) {
+        VTClient.sharedInstance.taskForImageDataWithURL(imageURL) { (imageData, error) -> Void in
+            if error != nil {
+                return
+            }
+            
+            dispatch_async(dispatch_get_main_queue()) {
+                cell.view.hidden = true
+                cell.activityViewIndicator.stopAnimating()
+                cell.imageView.contentMode = .ScaleAspectFill
+                cell.imageView.image = UIImage(data: imageData!)
+            }
+        }
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("photoCell", forIndexPath: indexPath) as! CustomCollectionViewCell
+        
+        configureCell(cell, imageURL: urlStrings[indexPath.row])
         
         return cell
     }

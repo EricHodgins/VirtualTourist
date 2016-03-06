@@ -12,6 +12,8 @@ import MapKit
 class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var mapView: MKMapView!
+    
+    var urlStrings = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,8 +30,9 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
     func downloadFlickrPhotos(withLatitude latitude: Double, andLongitude longitude: Double) {
         VTClient.sharedInstance.getPhotosFromFlick(latitude, lon: longitude, page: 1) { (success, photoResults, errorString) -> Void in
             if success {
+                self.urlStrings = [String]()
                 for photo in photoResults! {
-                    print(photo["url_m"]!)
+                    self.urlStrings.append(photo["url_m"] as! String)
                 }
             }
         }
@@ -64,7 +67,7 @@ extension TravelLocationsViewController {
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView!.canShowCallout = true
-            pinView!.pinTintColor = UIColor.greenColor()
+            pinView!.pinTintColor = UIColor.blueColor()
             pinView!.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure)
         } else {
             pinView!.annotation = annotation
@@ -82,6 +85,7 @@ extension TravelLocationsViewController {
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
         print("did select")
         let photoViewController = storyboard?.instantiateViewControllerWithIdentifier("PhotoAlbum") as! PhotoAlbumViewController
+        photoViewController.urlStrings = urlStrings
         navigationController?.pushViewController(photoViewController, animated: true)
     }
 }

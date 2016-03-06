@@ -81,4 +81,29 @@ extension VTClient {
         return task
     }
     
+    func taskForImageDataWithURL(imageURL: String, completionHandler: (imageData: NSData?, error: NSError?) -> Void) -> NSURLSessionDataTask {
+        let url = NSURL(string: imageURL)!
+        
+        let request = NSURLRequest(URL: url)
+        
+        let task = session.dataTaskWithRequest(request) { data, response, error in
+            if error != nil {
+                completionHandler(imageData: nil, error: NSError(domain: "taskForImageDataWithURL", code: 0, userInfo: [NSLocalizedDescriptionKey : "could not get image data: \(error?.localizedDescription)"]))
+                return
+            }
+            
+            guard let data = data else {
+                completionHandler(imageData: nil, error: NSError(domain: "taskForImageDataWithURL", code: 0, userInfo: [NSLocalizedDescriptionKey : "image data invalid."]))
+                return
+            }
+            
+            completionHandler(imageData: data, error: nil)
+            
+        }
+        
+        task.resume()
+        
+        return task
+    }
+    
 }
