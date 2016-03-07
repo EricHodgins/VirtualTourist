@@ -33,7 +33,8 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     func adjustCellDimensions() {
         //TODO: Add check to find device orientation
         
-        let dimension = ((collectionView.frame.width) - (2 * cellSpacing)) / 3
+        let dimension = floor(((collectionView.frame.width) - (2 * cellSpacing)) / 3)
+        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         flowLayout.itemSize = CGSize(width: dimension, height: dimension)
         flowLayout.minimumLineSpacing = cellSpacing
         flowLayout.minimumInteritemSpacing = cellSpacing

@@ -15,7 +15,7 @@ extension VTClient {
         static let FLICKR_BASE_URL = "https://api.flickr.com/services/rest/"
         static let FLICKR_API_KEY = "d5c77bcf5997864103340b3743519aed"
         static let FLICKR_PIC_URL_SHORTCUT = "url_m"
-        static let FLICKR_PER_PAGE = 9
+        static let FLICKR_PER_PAGE = 21
     }
     
     //MARK: Parameter Keys 
