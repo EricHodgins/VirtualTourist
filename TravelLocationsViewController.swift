@@ -14,18 +14,22 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var deletePinsView: UIView!
     @IBOutlet weak var mapView: MKMapView!
+    
     var finishedDraggingMapPin : Bool = true
     var originalFrame = CGRect()
-    var pushed : Bool = false
+    var mapViewIsEditable : Bool = false
     
     var urlStrings = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Get the orignal view frame to restore back to normal whent the view is moved to show the pins can be removed
         originalFrame = self.view.frame
         
         mapView.delegate = self
         
+        // Gesture to add Pin annotation to the mapView
         let longGestureRecognizer = UILongPressGestureRecognizer(target: self, action: "addAnnotation:")
         longGestureRecognizer.minimumPressDuration = 1.5
         mapView.addGestureRecognizer(longGestureRecognizer)
@@ -33,6 +37,7 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
     }
     
     
+    //MARK: Download Flickr Photos
     func downloadFlickrPhotos(withLatitude latitude: Double, andLongitude longitude: Double) {
         VTClient.sharedInstance.getPhotosFromFlick(latitude, lon: longitude, page: 1) { (success, photoResults, errorString) -> Void in
             if success {
@@ -47,31 +52,34 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
     
     @IBAction func editButtonPressed(sender: AnyObject) {
 
-        if !pushed {
+        if !mapViewIsEditable {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "editButtonPressed:")
             let editFrame = CGRectMake(view.frame.origin.x, view.frame.origin.y - deletePinsView.frame.height, view.frame.width, view.frame.height)
             UIView.animateWithDuration(0.3) { () -> Void in
                 self.view.frame = editFrame
             }
         } else {
-        
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "editButtonPressed:")
             UIView.animateWithDuration(0.3) { () -> Void in
                 self.view.frame = self.originalFrame
             }
         }
         
-        pushed = !pushed
+        mapViewIsEditable = !mapViewIsEditable
     }
 
 }
 
 
+
+//MARK: MapView Delegate
 extension TravelLocationsViewController {
     func addAnnotation(gestureRecognizer : UIGestureRecognizer) {
         
         if gestureRecognizer.state == .Began {
             let touchLocation = gestureRecognizer.locationInView(mapView)
             let mapCoordinates = mapView.convertPoint(touchLocation, toCoordinateFromView: mapView)
-            print(mapCoordinates)
+
             downloadFlickrPhotos(withLatitude: mapCoordinates.latitude, andLongitude: mapCoordinates.longitude)
             
             let annotation = MKPointAnnotation()
@@ -103,13 +111,17 @@ extension TravelLocationsViewController {
 
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        print("pin tapped")
+        print("callout accessory tapped")
     }
     
     
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
         
-        if finishedDraggingMapPin {
+        if mapViewIsEditable {
+            mapView.removeAnnotation(view.annotation!)
+        }
+        
+        if finishedDraggingMapPin && !mapViewIsEditable {
             let photoViewController = storyboard?.instantiateViewControllerWithIdentifier("PhotoAlbum") as! PhotoAlbumViewController
             photoViewController.urlStrings = urlStrings
             navigationController?.pushViewController(photoViewController, animated: true)
@@ -118,8 +130,6 @@ extension TravelLocationsViewController {
     
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, didChangeDragState newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
-        
-        print(view.annotation?.coordinate)
         
         if newState == .Starting {
             finishedDraggingMapPin = false
