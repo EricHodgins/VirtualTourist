@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 
 class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
@@ -27,12 +28,19 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
         //Get the orignal view frame to restore back to normal whent the view is moved to show the pins can be removed
         originalFrame = self.view.frame
         
+        
+        try! fetchedResultsController.performFetch()
+        addCoreDataSavedPinsToMapView()
+        
+        
         mapView.delegate = self
         
         // Gesture to add Pin annotation to the mapView
         let longGestureRecognizer = UILongPressGestureRecognizer(target: self, action: "addAnnotation:")
         longGestureRecognizer.minimumPressDuration = 1.5
         mapView.addGestureRecognizer(longGestureRecognizer)
+        
+
         
     }
     
@@ -49,7 +57,20 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
+    //MARK: Core Data
+    var sharedContext : NSManagedObjectContext {
+        return CoreDataStackManager.sharedInstance.managedObjectContext
+    }
     
+    lazy var fetchedResultsController : NSFetchedResultsController = {
+        let fetchRequest = NSFetchRequest(entityName: "Pin")
+        let sortDescriptor = NSSortDescriptor(key: "latitude", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.sharedContext, sectionNameKeyPath: nil, cacheName: nil)
+    }()
+    
+    
+    //MARK: Edit Button Pressed
     @IBAction func editButtonPressed(sender: AnyObject) {
 
         if !mapViewIsEditable {
@@ -74,6 +95,17 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
 
 //MARK: MapView Delegate
 extension TravelLocationsViewController {
+    
+    func addCoreDataSavedPinsToMapView() {
+        print(fetchedResultsController.sections?[0].numberOfObjects)
+        for pin in fetchedResultsController.fetchedObjects as! [Pin] {
+//            let annotation = MKPointAnnotation()
+//            annotation.coordinate = CLLocationCoordinate2D(latitude: pin.latitude as Double, longitude: pin.longitude as Double)
+            mapView.addAnnotation(pin)
+        }
+    }
+    
+    
     func addAnnotation(gestureRecognizer : UIGestureRecognizer) {
         
         if gestureRecognizer.state == .Began {
@@ -82,10 +114,11 @@ extension TravelLocationsViewController {
 
             downloadFlickrPhotos(withLatitude: mapCoordinates.latitude, andLongitude: mapCoordinates.longitude)
             
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = mapCoordinates
-            annotation.title = "Maybe put number of photos or something here..."
-            mapView.addAnnotation(annotation)
+            let pin = Pin(lat: mapCoordinates.latitude, lon: mapCoordinates.longitude, context: self.sharedContext)
+            mapView.addAnnotation(pin)
+            
+            //Save Pin
+            CoreDataStackManager.sharedInstance.saveContext()
         }
     }
     
@@ -96,12 +129,12 @@ extension TravelLocationsViewController {
         
         var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
         if pinView == nil {
+            print("pinview is nil")
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView?.canShowCallout = true
             pinView!.animatesDrop = true
             pinView!.draggable = true
-            pinView!.canShowCallout = true
             pinView!.pinTintColor = UIColor.blueColor()
-            pinView!.rightCalloutAccessoryView = UIButton(type: .InfoLight)
         } else {
             pinView!.annotation = annotation
         }
@@ -116,6 +149,7 @@ extension TravelLocationsViewController {
     
     
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
+        print("did select annotation view: \(mapViewIsEditable), \(finishedDraggingMapPin)")
         
         if mapViewIsEditable {
             mapView.removeAnnotation(view.annotation!)
@@ -130,13 +164,24 @@ extension TravelLocationsViewController {
     
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, didChangeDragState newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
+        print("didChangeDragState")
         
         if newState == .Starting {
             finishedDraggingMapPin = false
         } else if newState == .Ending || newState == .Canceling {
             view.dragState = .None
+            
+            //TODO: Delete associated photos related to pin and begin downloading new ones
+            
+            let pin = view.annotation as! Pin
+            pin.latitude = (view.annotation?.coordinate.latitude)!
+            pin.longitude = (view.annotation?.coordinate.longitude)!
+            
+            CoreDataStackManager.sharedInstance.saveContext()
+            
             finishedDraggingMapPin = true
             downloadFlickrPhotos(withLatitude: (view.annotation?.coordinate.latitude)!, andLongitude: (view.annotation?.coordinate.longitude)!)
+
         }
     }
 }
