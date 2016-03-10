@@ -152,6 +152,9 @@ extension TravelLocationsViewController {
         print("did select annotation view: \(mapViewIsEditable), \(finishedDraggingMapPin)")
         
         if mapViewIsEditable {
+            let pin = view.annotation as! Pin
+            sharedContext.deleteObject(pin)
+            CoreDataStackManager.sharedInstance.saveContext()
             mapView.removeAnnotation(view.annotation!)
         }
         

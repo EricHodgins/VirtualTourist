@@ -36,7 +36,7 @@ class Pin : NSManagedObject, MKAnnotation {
     }
     
     var title : String? {
-        return "Title"
+        return "\(latitude), \(longitude)"
     }
     
     func setCoordinate(newCoordinate: CLLocationCoordinate2D) {

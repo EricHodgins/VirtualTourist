@@ -109,22 +109,36 @@
                                             <rect key="frame" x="0.0" y="0.0" width="134" height="125"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="saj-Zf-piq">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="saj-Zf-piq">
                                                     <rect key="frame" x="0.0" y="0.0" width="134" height="125"/>
                                                 </imageView>
-                                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ggn-wq-hmY">
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ggn-wq-hmY">
                                                     <rect key="frame" x="0.0" y="0.0" width="134" height="125"/>
                                                     <subviews>
-                                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="rLE-QR-q5z">
+                                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="rLE-QR-q5z">
                                                             <rect key="frame" x="49" y="44" width="37" height="37"/>
                                                         </activityIndicatorView>
                                                     </subviews>
                                                     <color key="backgroundColor" red="0.1960784314" green="0.29411764709999999" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstItem="rLE-QR-q5z" firstAttribute="centerX" secondItem="Ggn-wq-hmY" secondAttribute="centerX" id="55V-05-4vS"/>
+                                                        <constraint firstItem="rLE-QR-q5z" firstAttribute="centerY" secondItem="Ggn-wq-hmY" secondAttribute="centerY" id="DVB-0L-rp4"/>
+                                                    </constraints>
                                                 </view>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="Ggn-wq-hmY" firstAttribute="top" secondItem="saj-Zf-piq" secondAttribute="top" id="Au2-wS-szF"/>
+                                            <constraint firstItem="Ggn-wq-hmY" firstAttribute="top" secondItem="084-p1-Mln" secondAttribute="top" id="BWN-6E-rrz"/>
+                                            <constraint firstItem="Ggn-wq-hmY" firstAttribute="leading" secondItem="084-p1-Mln" secondAttribute="leading" id="I1B-eZ-bC8"/>
+                                            <constraint firstItem="Ggn-wq-hmY" firstAttribute="trailing" secondItem="saj-Zf-piq" secondAttribute="trailing" id="O0C-qW-qU0"/>
+                                            <constraint firstAttribute="trailing" secondItem="Ggn-wq-hmY" secondAttribute="trailing" id="Ubh-Kj-SWL"/>
+                                            <constraint firstItem="Ggn-wq-hmY" firstAttribute="leading" secondItem="saj-Zf-piq" secondAttribute="leading" id="ago-hr-H8Q"/>
+                                            <constraint firstAttribute="bottom" secondItem="Ggn-wq-hmY" secondAttribute="bottom" id="umv-cd-6Zf"/>
+                                            <constraint firstItem="Ggn-wq-hmY" firstAttribute="bottom" secondItem="saj-Zf-piq" secondAttribute="bottom" id="w8T-wm-J7B"/>
+                                        </constraints>
                                         <connections>
                                             <outlet property="activityViewIndicator" destination="rLE-QR-q5z" id="Fpj-sF-nkr"/>
                                             <outlet property="imageView" destination="saj-Zf-piq" id="V05-2x-2zH"/>
