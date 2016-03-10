@@ -14,12 +14,18 @@ class VTClient {
     
     // Setup Singleton instance
     static let sharedInstance = VTClient()
+
     
     //prevent others from using the class
     private init() {
         session = NSURLSession.sharedSession()
     }
     
+    
+    //Shared Image Cache
+    struct Caches {
+        static let imageCache = ImageCache()
+    }
     
     //MARK: Parse JSON Data
     

@@ -99,8 +99,6 @@ extension TravelLocationsViewController {
     func addCoreDataSavedPinsToMapView() {
         print(fetchedResultsController.sections?[0].numberOfObjects)
         for pin in fetchedResultsController.fetchedObjects as! [Pin] {
-//            let annotation = MKPointAnnotation()
-//            annotation.coordinate = CLLocationCoordinate2D(latitude: pin.latitude as Double, longitude: pin.longitude as Double)
             mapView.addAnnotation(pin)
         }
     }

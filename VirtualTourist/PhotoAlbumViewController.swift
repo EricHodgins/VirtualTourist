@@ -55,6 +55,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     func configureCell(cell: CustomCollectionViewCell, imageURL: String) {
+        
         VTClient.sharedInstance.taskForImageDataWithURL(imageURL) { (imageData, error) -> Void in
             if error != nil {
                 return
