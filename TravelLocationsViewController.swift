@@ -46,13 +46,18 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
     
     
     //MARK: Download Flickr Photos
-    func downloadFlickrPhotos(withLatitude latitude: Double, andLongitude longitude: Double) {
+    func downloadFlickrPhotos(withLatitude latitude: Double, andLongitude longitude: Double, pin: Pin) {
         VTClient.sharedInstance.getPhotosFromFlick(latitude, lon: longitude, page: 1) { (success, photoResults, errorString) -> Void in
             if success {
                 self.urlStrings = [String]()
-                for photo in photoResults! {
-                    self.urlStrings.append(photo["url_m"] as! String)
+                for pic in photoResults! {
+                    self.urlStrings.append(pic["url_m"] as! String)
+                    let photo = Photo(imagePath: pic["url_m"] as! String, context: self.sharedContext)
+                    photo.pin = pin
                 }
+                
+                
+                CoreDataStackManager.sharedInstance.saveContext()
             }
         }
     }
@@ -97,9 +102,10 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
 extension TravelLocationsViewController {
     
     func addCoreDataSavedPinsToMapView() {
-        print(fetchedResultsController.sections?[0].numberOfObjects)
         for pin in fetchedResultsController.fetchedObjects as! [Pin] {
             mapView.addAnnotation(pin)
+            print(pin)
+            print(pin.photos.count)
         }
     }
     
@@ -109,10 +115,9 @@ extension TravelLocationsViewController {
         if gestureRecognizer.state == .Began {
             let touchLocation = gestureRecognizer.locationInView(mapView)
             let mapCoordinates = mapView.convertPoint(touchLocation, toCoordinateFromView: mapView)
-
-            downloadFlickrPhotos(withLatitude: mapCoordinates.latitude, andLongitude: mapCoordinates.longitude)
             
             let pin = Pin(lat: mapCoordinates.latitude, lon: mapCoordinates.longitude, context: self.sharedContext)
+            downloadFlickrPhotos(withLatitude: mapCoordinates.latitude, andLongitude: mapCoordinates.longitude, pin: pin)
             mapView.addAnnotation(pin)
             
             //Save Pin
@@ -121,13 +126,11 @@ extension TravelLocationsViewController {
     }
     
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
-        print("view for annotation")
         
         let reuseId = "pin"
         
         var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
         if pinView == nil {
-            print("pinview is nil")
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView?.canShowCallout = true
             pinView!.animatesDrop = true
@@ -159,13 +162,13 @@ extension TravelLocationsViewController {
         if finishedDraggingMapPin && !mapViewIsEditable {
             let photoViewController = storyboard?.instantiateViewControllerWithIdentifier("PhotoAlbum") as! PhotoAlbumViewController
             photoViewController.urlStrings = urlStrings
+            photoViewController.pin  = view.annotation as! Pin
             navigationController?.pushViewController(photoViewController, animated: true)
         }
     }
     
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, didChangeDragState newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
-        print("didChangeDragState")
         
         if newState == .Starting {
             finishedDraggingMapPin = false
@@ -181,7 +184,7 @@ extension TravelLocationsViewController {
             CoreDataStackManager.sharedInstance.saveContext()
             
             finishedDraggingMapPin = true
-            downloadFlickrPhotos(withLatitude: (view.annotation?.coordinate.latitude)!, andLongitude: (view.annotation?.coordinate.longitude)!)
+            downloadFlickrPhotos(withLatitude: (view.annotation?.coordinate.latitude)!, andLongitude: (view.annotation?.coordinate.longitude)!, pin: pin)
 
         }
     }

@@ -7,10 +7,13 @@
 //
 
 import UIKit
+import CoreData
 
 private let cellSpacing: CGFloat = 1
 
-class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, NSFetchedResultsControllerDelegate {
+    
+    var pin: Pin!
 
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -24,6 +27,11 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         collectionView.dataSource = self
         
         print("number of photos: \(urlStrings.count)")
+        
+        
+        try! fetchedResultsController.performFetch()
+        
+        fetchedResultsController.delegate = self
     }
     
     override func viewDidLayoutSubviews() {
@@ -44,6 +52,23 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     @IBAction func newCollectionButtonPressed(sender: AnyObject) {
         
     }
+    
+    
+    //MARK - Core Data Convenience
+    lazy var sharedContext: NSManagedObjectContext = {
+        return CoreDataStackManager.sharedInstance.managedObjectContext
+    }()
+    
+    lazy var fetchedResultsController: NSFetchedResultsController = {
+        let fetchRequest = NSFetchRequest(entityName: "Photo")
+        let sortDescriptors = NSSortDescriptor(key: "photoPath", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptors]
+        fetchRequest.predicate = NSPredicate(format: "pin == %@", self.pin)
+        
+        
+        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.sharedContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+    }()
     
     
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
@@ -77,5 +102,40 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         
         return cell
     }
+    
+    
+    //MARK: NSFetchedController Delegate
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        print("controller will change content")
+    }
+    
+    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+        print("Controller did change section")
+    }
+    
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        print("Controller did change object")
+    }
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        print("controller did change content")
+    }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -30,7 +30,7 @@ class Photo : NSManagedObject {
     }
     
     
-    var flickImage : UIImage? {
+    var flickrImage : UIImage? {
         get {
             return VTClient.Caches.imageCache.imageWithIdentifier(photoPath)
         }
