@@ -161,7 +161,7 @@ extension TravelLocationsViewController {
         
         if finishedDraggingMapPin && !mapViewIsEditable {
             let photoViewController = storyboard?.instantiateViewControllerWithIdentifier("PhotoAlbum") as! PhotoAlbumViewController
-            photoViewController.urlStrings = urlStrings
+            //photoViewController.urlStrings = urlStrings
             photoViewController.pin  = view.annotation as! Pin
             navigationController?.pushViewController(photoViewController, animated: true)
         }

@@ -13,6 +13,11 @@ private let cellSpacing: CGFloat = 1
 
 class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, NSFetchedResultsControllerDelegate {
     
+    var selectedIndexes = [NSIndexPath]()
+    var insertedIndexPaths: [NSIndexPath]!
+    var deletedIndexPaths: [NSIndexPath]!
+    var updatedIndexPaths: [NSIndexPath]!
+    
     var pin: Pin!
 
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
@@ -76,7 +81,9 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return urlStrings.count
+        //return urlStrings.count
+        let sectionInfo = fetchedResultsController.sections![section]
+        return sectionInfo.numberOfObjects
     }
     
     func configureCell(cell: CustomCollectionViewCell, imageURL: String) {
@@ -97,8 +104,9 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("photoCell", forIndexPath: indexPath) as! CustomCollectionViewCell
+        let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
         
-        configureCell(cell, imageURL: urlStrings[indexPath.row])
+        configureCell(cell, imageURL: photo.photoPath!)
         
         return cell
     }
@@ -107,6 +115,9 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     //MARK: NSFetchedController Delegate
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
         print("controller will change content")
+        insertedIndexPaths = [NSIndexPath]()
+        deletedIndexPaths = [NSIndexPath]()
+        updatedIndexPaths = [NSIndexPath]()
     }
     
     func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
@@ -115,10 +126,41 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         print("Controller did change object")
+        
+        switch type {
+        case .Insert:
+            insertedIndexPaths.append(newIndexPath!)
+            break
+        case .Delete:
+            deletedIndexPaths.append(indexPath!)
+            break
+        case .Update:
+            updatedIndexPaths.append(indexPath!)
+            break
+        default:
+            break
+        }
     }
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         print("controller did change content")
+        
+        collectionView.performBatchUpdates({ () -> Void in
+            
+            for indexPath in self.insertedIndexPaths {
+                self.collectionView.insertItemsAtIndexPaths([indexPath])
+            }
+            
+            for indexPath in self.deletedIndexPaths {
+                self.collectionView.deleteItemsAtIndexPaths([indexPath])
+            }
+            
+            for indexPath in self.updatedIndexPaths {
+                self.collectionView.reloadItemsAtIndexPaths([indexPath])
+            }
+            
+            
+            }, completion: nil)
     }
 
 }
