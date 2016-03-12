@@ -56,8 +56,10 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
                     photo.pin = pin
                 }
                 
-                
-                CoreDataStackManager.sharedInstance.saveContext()
+                self.sharedContext.performBlock({ () -> Void in
+                    CoreDataStackManager.sharedInstance.saveContext()
+                })
+
             }
         }
     }

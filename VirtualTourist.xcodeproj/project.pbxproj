@@ -185,11 +185,11 @@
 			children = (
 				7A159A431C87FA5C00B178AA /* VTClient.swift */,
 				7A0ED5AA1C8D503F002694C3 /* VirtualTouristModel.xcdatamodeld */,
-				7A0B31A21C8E8CEF00B13C30 /* Pin.swift */,
-				7A0B31A41C8E91F700B13C30 /* Photo.swift */,
 				7A159A461C87FD9F00B178AA /* VTConstants.swift */,
 				7A159A481C88039900B178AA /* VTConvenience.swift */,
 				7A0BB5A91C913D57009D555C /* ImageCache.swift */,
+				7A0B31A21C8E8CEF00B13C30 /* Pin.swift */,
+				7A0B31A41C8E91F700B13C30 /* Photo.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";

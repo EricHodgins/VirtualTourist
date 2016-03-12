@@ -31,8 +31,6 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         collectionView.delegate = self
         collectionView.dataSource = self
         
-        print("number of photos: \(urlStrings.count)")
-        
         
         try! fetchedResultsController.performFetch()
         
@@ -86,18 +84,34 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         return sectionInfo.numberOfObjects
     }
     
-    func configureCell(cell: CustomCollectionViewCell, imageURL: String) {
-        
-        VTClient.sharedInstance.taskForImageDataWithURL(imageURL) { (imageData, error) -> Void in
-            if error != nil {
-                return
-            }
-            
-            dispatch_async(dispatch_get_main_queue()) {
-                cell.view.hidden = true
-                cell.activityViewIndicator.stopAnimating()
-                cell.imageView.contentMode = .ScaleAspectFill
-                cell.imageView.image = UIImage(data: imageData!)
+    func configureCell(cell: CustomCollectionViewCell, photo: Photo) {
+        print("path: \(photo.photoPath)")
+        print("image: \(photo.flickrImage)")
+        //check if photo path already exists
+        if photo.photoPath == nil || photo.photoPath == "" {
+            print("photo path is nil")
+        } else if photo.flickrImage != nil {
+            print("set image if there is already an image")
+            cell.view.hidden = true
+            cell.activityViewIndicator.stopAnimating()
+            cell.imageView.contentMode = .ScaleAspectFill
+            cell.imageView!.image = photo.flickrImage!
+        }
+        else {
+            VTClient.sharedInstance.taskForImageDataWithURL(photo.photoPath!) { (imageData, error) -> Void in
+                if error != nil {
+                    return
+                }
+                
+                print("downloading photos.......")
+                photo.flickrImage = UIImage(data: imageData!)
+                
+                dispatch_async(dispatch_get_main_queue()) {
+                    cell.view.hidden = true
+                    cell.activityViewIndicator.stopAnimating()
+                    cell.imageView.contentMode = .ScaleAspectFill
+                    cell.imageView.image = UIImage(data: imageData!)
+                }
             }
         }
     }
@@ -106,7 +120,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("photoCell", forIndexPath: indexPath) as! CustomCollectionViewCell
         let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
         
-        configureCell(cell, imageURL: photo.photoPath!)
+        configureCell(cell, photo: photo)
         
         return cell
     }

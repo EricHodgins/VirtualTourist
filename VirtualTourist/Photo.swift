@@ -32,11 +32,15 @@ class Photo : NSManagedObject {
     
     var flickrImage : UIImage? {
         get {
-            return VTClient.Caches.imageCache.imageWithIdentifier(photoPath)
+            let url = NSURL(string: photoPath!)!
+            let path = url.lastPathComponent!
+            return VTClient.Caches.imageCache.imageWithIdentifier(path)
         }
         
         set {
-            VTClient.Caches.imageCache.storeImage(newValue, withIdentifier: photoPath!)
+            let url = NSURL(string: photoPath!)!
+            let path = url.lastPathComponent!
+            VTClient.Caches.imageCache.storeImage(newValue, withIdentifier: path)
         }
     }
     

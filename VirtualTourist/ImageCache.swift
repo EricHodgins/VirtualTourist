@@ -21,15 +21,17 @@ class ImageCache {
         }
         
         let path = pathForIdentifier(identifier!)
-        
+        print("Get images: \(path)")
         // In memory Cache already?
         
         if let image = inMemoryCache.objectForKey(path) as? UIImage {
+            print("Image in memory")
             return image
         }
         
         // If not, on Hard drive?
         if let data = NSData(contentsOfFile: path) {
+            print("Image on hard drive.")
             return UIImage(data: data)
         }
         
@@ -58,6 +60,7 @@ class ImageCache {
         //And keep in documents directory
         let data = UIImagePNGRepresentation(image!)!
         data.writeToFile(path, atomically: true)
+        print("Store images: \(path)")
     }
     
     
@@ -66,7 +69,7 @@ class ImageCache {
     func pathForIdentifier(identifier: String) -> String {
         let documentsDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
         let fullURL = documentsDirectoryURL.URLByAppendingPathComponent(identifier)
-        
+
         return fullURL.path!
     }
 }
