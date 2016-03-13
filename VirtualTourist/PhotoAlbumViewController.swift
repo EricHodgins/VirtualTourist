@@ -99,7 +99,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
 
         }
         else {
-            VTClient.sharedInstance.taskForImageDataWithURL(photo.photoPath!) { (imageData, error) -> Void in
+            let task = VTClient.sharedInstance.taskForImageDataWithURL(photo.photoPath!) { (imageData, error) -> Void in
                 if error != nil {
                     return
                 }
@@ -107,12 +107,22 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
                 photo.flickrImage = UIImage(data: imageData!)
                 
                 dispatch_sync(dispatch_get_main_queue()) {
-                    cell.view.hidden = true
-                    cell.activityViewIndicator.stopAnimating()
-                    cell.imageView.contentMode = .ScaleAspectFill
-                    cell.imageView.image = UIImage(data: imageData!)
+                    let visCell = self.collectionView.cellForItemAtIndexPath(indexPath) as? CustomCollectionViewCell
+                    if visCell != nil {
+                        visCell!.view.hidden = true
+                        visCell!.activityViewIndicator.stopAnimating()
+                        visCell!.imageView.contentMode = .ScaleAspectFill
+                        visCell!.imageView.image = UIImage(data: imageData!)
+                    }
                 }
             }
+            
+            if cell.imageView.image == nil {
+                cell.view.hidden = false
+                cell.activityViewIndicator.startAnimating()
+            }
+            
+            cell.taskToCancelifCellIsReused = task
         }
     }
     
