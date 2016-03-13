@@ -13,4 +13,13 @@ class CustomCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var view: UIView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var activityViewIndicator: UIActivityIndicatorView!
+    
+    var taskToCancelifCellIsReused: NSURLSessionTask? {
+        didSet {
+            if let taskToCancel = oldValue {
+                taskToCancel.cancel()
+            }
+        }
+    }
+    
 }

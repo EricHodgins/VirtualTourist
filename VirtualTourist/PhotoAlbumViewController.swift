@@ -84,18 +84,19 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         return sectionInfo.numberOfObjects
     }
     
-    func configureCell(cell: CustomCollectionViewCell, photo: Photo) {
-        print("path: \(photo.photoPath)")
-        print("image: \(photo.flickrImage)")
+    func configureCell(cell: CustomCollectionViewCell, photo: Photo, indexPath: NSIndexPath) {
         //check if photo path already exists
+        
+        cell.imageView!.image = nil
+        
         if photo.photoPath == nil || photo.photoPath == "" {
-            print("photo path is nil")
+
         } else if photo.flickrImage != nil {
-            print("set image if there is already an image")
             cell.view.hidden = true
             cell.activityViewIndicator.stopAnimating()
             cell.imageView.contentMode = .ScaleAspectFill
             cell.imageView!.image = photo.flickrImage!
+
         }
         else {
             VTClient.sharedInstance.taskForImageDataWithURL(photo.photoPath!) { (imageData, error) -> Void in
@@ -103,10 +104,9 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
                     return
                 }
                 
-                print("downloading photos.......")
                 photo.flickrImage = UIImage(data: imageData!)
                 
-                dispatch_async(dispatch_get_main_queue()) {
+                dispatch_sync(dispatch_get_main_queue()) {
                     cell.view.hidden = true
                     cell.activityViewIndicator.stopAnimating()
                     cell.imageView.contentMode = .ScaleAspectFill
@@ -120,7 +120,12 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("photoCell", forIndexPath: indexPath) as! CustomCollectionViewCell
         let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
         
-        configureCell(cell, photo: photo)
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) { () -> Void in
+//            self.configureCell(cell, photo: photo)
+//        }
+
+        configureCell(cell, photo: photo, indexPath: indexPath)
+        
         
         return cell
     }
