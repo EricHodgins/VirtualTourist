@@ -49,7 +49,6 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
     func downloadFlickrPhotos(withLatitude latitude: Double, andLongitude longitude: Double, pin: Pin) {
         VTClient.sharedInstance.getPhotosFromFlick(latitude, lon: longitude, page: 1) { (success, photoResults, errorString) -> Void in
             if success {
-                self.urlStrings = [String]()
                 for pic in photoResults! {
                     self.urlStrings.append(pic["url_m"] as! String)
                     let photo = Photo(imagePath: pic["url_m"] as! String, context: self.sharedContext)
@@ -89,6 +88,7 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
         } else {
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "editButtonPressed:")
             UIView.animateWithDuration(0.3) { () -> Void in
+                //TODO: when device orientation changes may need to fix this here
                 self.view.frame = self.originalFrame
             }
         }
@@ -106,8 +106,6 @@ extension TravelLocationsViewController {
     func addCoreDataSavedPinsToMapView() {
         for pin in fetchedResultsController.fetchedObjects as! [Pin] {
             mapView.addAnnotation(pin)
-            print(pin)
-            print(pin.photos.count)
         }
     }
     
@@ -118,7 +116,10 @@ extension TravelLocationsViewController {
             let touchLocation = gestureRecognizer.locationInView(mapView)
             let mapCoordinates = mapView.convertPoint(touchLocation, toCoordinateFromView: mapView)
             
+            // Make a Pin entity
             let pin = Pin(lat: mapCoordinates.latitude, lon: mapCoordinates.longitude, context: self.sharedContext)
+            
+            // Begin downloading photo urls
             downloadFlickrPhotos(withLatitude: mapCoordinates.latitude, andLongitude: mapCoordinates.longitude, pin: pin)
             mapView.addAnnotation(pin)
             
@@ -152,7 +153,6 @@ extension TravelLocationsViewController {
     
     
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
-        print("did select annotation view: \(mapViewIsEditable), \(finishedDraggingMapPin)")
         
         if mapViewIsEditable {
             let pin = view.annotation as! Pin
@@ -161,9 +161,9 @@ extension TravelLocationsViewController {
             mapView.removeAnnotation(view.annotation!)
         }
         
+        // Make sure the pin is not being dragged & the mapView is not in Edit mode (deleting pins)
         if finishedDraggingMapPin && !mapViewIsEditable {
             let photoViewController = storyboard?.instantiateViewControllerWithIdentifier("PhotoAlbum") as! PhotoAlbumViewController
-            //photoViewController.urlStrings = urlStrings
             photoViewController.pin  = view.annotation as! Pin
             navigationController?.pushViewController(photoViewController, animated: true)
         }
@@ -177,15 +177,26 @@ extension TravelLocationsViewController {
         } else if newState == .Ending || newState == .Canceling {
             view.dragState = .None
             
-            //TODO: Delete associated photos related to pin and begin downloading new ones
-            
+            // Grab the reference to the Pin object
             let pin = view.annotation as! Pin
+            
+            // Delete all associated images with the Pin
+            for photo in pin.photos as NSArray {
+                sharedContext.deleteObject(photo as! Photo)
+            }
+            
+            // Update the lat and lon values
             pin.latitude = (view.annotation?.coordinate.latitude)!
             pin.longitude = (view.annotation?.coordinate.longitude)!
             
+            
+            // Now save the new Pin location with 0 photos
             CoreDataStackManager.sharedInstance.saveContext()
             
+            // Set the flag
             finishedDraggingMapPin = true
+            
+            // Begin downloading the photo url's
             downloadFlickrPhotos(withLatitude: (view.annotation?.coordinate.latitude)!, andLongitude: (view.annotation?.coordinate.longitude)!, pin: pin)
 
         }
