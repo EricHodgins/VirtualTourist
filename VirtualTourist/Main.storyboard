@@ -85,13 +85,6 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <items/>
                             </tabBar>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uYl-ou-piq">
-                                <rect key="frame" x="248" y="561" width="104" height="30"/>
-                                <state key="normal" title="New Collection"/>
-                                <connections>
-                                    <action selector="newCollectionButtonPressed:" destination="JIV-n5-vqV" eventType="touchUpInside" id="mas-mx-6gl"/>
-                                </connections>
-                            </button>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="v6F-dY-d5g">
                                 <rect key="frame" x="4" y="65" width="592" height="486"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -147,6 +140,10 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uYl-ou-piq">
+                                <rect key="frame" x="248" y="561" width="104" height="30"/>
+                                <state key="normal" title="New Collection"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -165,6 +162,7 @@
                     <connections>
                         <outlet property="collectionView" destination="v6F-dY-d5g" id="JPj-b7-pha"/>
                         <outlet property="flowLayout" destination="QUB-bl-hAy" id="oon-ha-548"/>
+                        <outlet property="newCollectionButton" destination="uYl-ou-piq" id="Edo-gm-Kvz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BEn-qf-xaY" userLabel="First Responder" sceneMemberID="firstResponder"/>

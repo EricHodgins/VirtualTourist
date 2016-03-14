@@ -22,8 +22,8 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
 
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var collectionView: UICollectionView!
-    
-    var urlStrings = [String]()
+    @IBOutlet weak var newCollectionButton: UIButton!
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +35,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         try! fetchedResultsController.performFetch()
         
         fetchedResultsController.delegate = self
+        updateBottomButton()
     }
     
     override func viewDidLayoutSubviews() {
@@ -49,10 +50,6 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         flowLayout.itemSize = CGSize(width: dimension, height: dimension)
         flowLayout.minimumLineSpacing = cellSpacing
         flowLayout.minimumInteritemSpacing = cellSpacing
-        
-    }
-
-    @IBAction func newCollectionButtonPressed(sender: AnyObject) {
         
     }
     
@@ -124,16 +121,19 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
             
             cell.taskToCancelifCellIsReused = task
         }
+        
+        //If the cell is selected or not change it's alpha value
+        if let _ = selectedIndexes.indexOf(indexPath) {
+            cell.imageView.alpha = 0.3
+        } else {
+            cell.imageView.alpha = 1.0
+        }
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("photoCell", forIndexPath: indexPath) as! CustomCollectionViewCell
         let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
         
-//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) { () -> Void in
-//            self.configureCell(cell, photo: photo)
-//        }
-
         configureCell(cell, photo: photo, indexPath: indexPath)
         
         
@@ -169,6 +169,8 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         default:
             break
         }
+        
+        updateBottomButton()
     }
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
@@ -191,7 +193,67 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
             
             }, completion: nil)
     }
+    
+    
+    
+    
+    //MARK: Selecting a cell to delete
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        
+        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! CustomCollectionViewCell
+        let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
+        
+        if let index = selectedIndexes.indexOf(indexPath) {
+            // if the index is already selected unselect it
+            selectedIndexes.removeAtIndex(index)
+        } else {
+            // else select it (add the indexPath)
+            selectedIndexes.append(indexPath)
+        }
+        
+        configureCell(cell, photo: photo, indexPath: indexPath)
+        
+        //update the New Collection button
+        updateBottomButton()
+    }
+    
+    
+    func updateBottomButton() {
 
+        if selectedIndexes.count > 0 {
+            newCollectionButton.setTitle("Remove Selected Items", forState: .Normal)
+            newCollectionButton.removeTarget(self, action: "loadNewPhotoPage", forControlEvents: .TouchUpInside)
+            newCollectionButton.addTarget(self, action: "deleteSelectedPhotos", forControlEvents: .TouchUpInside)
+        } else {
+            newCollectionButton.setTitle("New Collection", forState: .Normal)
+            newCollectionButton.removeTarget(self, action: "deleteSelectedPhotos", forControlEvents: .TouchUpInside)
+            newCollectionButton.addTarget(self, action: "loadNewPhotoPage", forControlEvents: .TouchUpInside)
+        }
+    }
+    
+    func deleteSelectedPhotos() {
+        print("delete selected photos")
+        var photosToDelete = [Photo]()
+        
+        for indexPath in selectedIndexes {
+            photosToDelete.append(fetchedResultsController.objectAtIndexPath(indexPath) as! Photo)
+        }
+        
+        for photo in photosToDelete {
+            sharedContext.deleteObject(photo)
+        }
+        
+        selectedIndexes = [NSIndexPath]()
+        
+        // Save current state
+        CoreDataStackManager.sharedInstance.saveContext()
+    }
+    
+    
+    func loadNewPhotoPage() {
+        print("load new photo page")
+    }
+    
 }
 
 
