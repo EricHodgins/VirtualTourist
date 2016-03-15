@@ -265,7 +265,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     
     
     func loadNewPhotoPage() {
-        print("load new photo page")
+        print("\(pin.totalPictureCount)")
     }
     
 }

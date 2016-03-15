@@ -46,8 +46,9 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
     
     //MARK: Download Flickr Photos
     func downloadFlickrPhotos(withLatitude latitude: Double, andLongitude longitude: Double, pin: Pin) {
-        VTClient.sharedInstance.getPhotosFromFlick(latitude, lon: longitude, page: 1) { (success, photoResults, errorString) -> Void in
+        VTClient.sharedInstance.getPhotosFromFlick(latitude, lon: longitude, page: 1) { (success, photoResults, pictureCount, errorString) -> Void in
             if success {
+                pin.totalPictureCount = pictureCount
                 for pic in photoResults! {
                     let photo = Photo(imagePath: pic["url_m"] as! String, context: self.sharedContext)
                     photo.pin = pin

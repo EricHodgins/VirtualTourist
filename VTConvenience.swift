@@ -13,7 +13,7 @@ extension VTClient {
     //MARK: GET
     
     //Get photos from flickr
-    func getPhotosFromFlick(lat : Double, lon : Double, page : Int, completionHandler: (success: Bool, results: [[String : AnyObject]]?, errorString: String?) -> Void) {
+    func getPhotosFromFlick(lat : Double, lon : Double, page : Int, completionHandler: (success: Bool, results: [[String : AnyObject]]?, pictureCount: Int, errorString: String?) -> Void) {
         
         // setup the parameters
         let parameters: [String : AnyObject] = [
@@ -29,7 +29,7 @@ extension VTClient {
         
         taskForFlickrGETPhotos(VTClient.Methods.FlickrSearch, parameters: parameters) { (JSONResults, error) -> Void in
             if let error = error {
-                completionHandler(success: false, results: nil, errorString: error.localizedDescription)
+                completionHandler(success: false, results: nil, pictureCount: 0, errorString: error.localizedDescription)
                 return
             }
             
@@ -38,12 +38,12 @@ extension VTClient {
                 let max = results["total"] as? String
                 print("max photos results = \(max)")
                 if let photos = results["photo"] as? [[String : AnyObject]] {
-                    completionHandler(success: true, results: photos, errorString: nil)
+                    completionHandler(success: true, results: photos, pictureCount: Int(max!)!, errorString: nil)
                     return
                 }
             }
             
-            completionHandler(success: false, results: nil, errorString: "Could not get JSON data from Flickr for pictures")
+            completionHandler(success: false, results: nil, pictureCount: 0, errorString: "Could not get JSON data from Flickr for pictures")
         }
         
         
