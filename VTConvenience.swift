@@ -33,7 +33,10 @@ extension VTClient {
                 return
             }
             
+            
             if let results = JSONResults["photos"] as? [String : AnyObject] {
+                let max = results["total"] as? String
+                print("max photos results = \(max)")
                 if let photos = results["photo"] as? [[String : AnyObject]] {
                     completionHandler(success: true, results: photos, errorString: nil)
                     return
@@ -79,6 +82,8 @@ extension VTClient {
         task.resume()
         return task
     }
+    
+    
     
     func taskForImageDataWithURL(imageURL: String, completionHandler: (imageData: NSData?, error: NSError?) -> Void) -> NSURLSessionDataTask {
         let url = NSURL(string: imageURL)!

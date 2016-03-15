@@ -27,6 +27,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("view did load albumVC")
         
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -40,6 +41,19 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     
     override func viewDidLayoutSubviews() {
         adjustCellDimensions()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        print("view did disappear")
+        super.viewWillDisappear(animated)
+        
+        for cell in collectionView.visibleCells() as! [CustomCollectionViewCell] {
+            cell.taskToCancelifCellIsReused?.cancel()
+        }
+    }
+    
+    deinit {
+        print("photo album has been deinitted.")
     }
     
     func adjustCellDimensions() {

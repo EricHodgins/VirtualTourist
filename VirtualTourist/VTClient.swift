@@ -44,6 +44,8 @@ class VTClient {
     }
     
     
+    
+    //MARK: Helper method for urls
     class func escapedParameters(parameters: [String : AnyObject]) -> String {
         var urlVars = [String]()
         

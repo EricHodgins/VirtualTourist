@@ -20,7 +20,6 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
     var originalFrame = CGRect()
     var mapViewIsEditable : Bool = false
     
-    var urlStrings = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +36,7 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
         
         // Gesture to add Pin annotation to the mapView
         let longGestureRecognizer = UILongPressGestureRecognizer(target: self, action: "addAnnotation:")
-        longGestureRecognizer.minimumPressDuration = 1.5
+        longGestureRecognizer.minimumPressDuration = 1.0
         mapView.addGestureRecognizer(longGestureRecognizer)
         
 
@@ -50,7 +49,6 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
         VTClient.sharedInstance.getPhotosFromFlick(latitude, lon: longitude, page: 1) { (success, photoResults, errorString) -> Void in
             if success {
                 for pic in photoResults! {
-                    self.urlStrings.append(pic["url_m"] as! String)
                     let photo = Photo(imagePath: pic["url_m"] as! String, context: self.sharedContext)
                     photo.pin = pin
                 }
@@ -62,6 +60,10 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
             }
         }
     }
+    
+    
+    
+    
     
     //MARK: Core Data
     var sharedContext : NSManagedObjectContext {
