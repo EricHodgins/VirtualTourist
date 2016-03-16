@@ -168,7 +168,6 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        print("Controller did change object")
         
         switch type {
         case .Insert:
@@ -188,7 +187,6 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        print("controller did change content")
         
         collectionView.performBatchUpdates({ () -> Void in
             
@@ -268,7 +266,9 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     //MARK: Load a new Collection
     func loadNewPhotoPage() {
         print("\(pin.totalPictureCount)")
+        deleteCollectionPhotos()
         
+        //Make sure pages don't exceed the total amount of pictures available
         if pin.maxPage > pin.currentPage {
             pin.currentPage++
         } else {
@@ -292,6 +292,13 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
             }
         }
 
+    }
+    
+    func deleteCollectionPhotos() {
+        for p in pin.photos as NSArray {
+            let photo = p as! Photo
+            sharedContext.deleteObject(photo)
+        }
     }
     
 }

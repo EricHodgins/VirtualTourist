@@ -46,7 +46,7 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
     
     //MARK: Download Flickr Photos
     func downloadFlickrPhotos(withLatitude latitude: Double, andLongitude longitude: Double, pin: Pin) {
-        VTClient.sharedInstance.getPhotosFromFlick(latitude, lon: longitude, page: 1) { (success, photoResults, pictureCount, errorString) -> Void in
+        VTClient.sharedInstance.getPhotosFromFlick(latitude, lon: longitude, page: pin.currentPage) { (success, photoResults, pictureCount, errorString) -> Void in
             if success {
                 pin.totalPictureCount = pictureCount
                 for pic in photoResults! {
@@ -191,6 +191,7 @@ extension TravelLocationsViewController {
             // Update the lat and lon values
             pin.latitude = (view.annotation?.coordinate.latitude)!
             pin.longitude = (view.annotation?.coordinate.longitude)!
+            pin.currentPage = 1
             
             
             // Now save the new Pin location with 0 photos
