@@ -204,4 +204,9 @@ extension TravelLocationsViewController {
 
         }
     }
+    
+    
+    func deletePin(pin : Pin) {
+        
+    }
 }

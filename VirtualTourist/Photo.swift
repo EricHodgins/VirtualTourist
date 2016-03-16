@@ -44,4 +44,27 @@ class Photo : NSManagedObject {
         }
     }
     
+    
+    override func prepareForDeletion() {
+        let fileManager = NSFileManager.defaultManager()
+        let fullPath = getPathToImageDataInDocumentsDirectory()
+        
+        do {
+            try fileManager.removeItemAtPath(fullPath)
+        } catch {
+            print("Unable to delete image files in documentary folder...the image may not of finished downloading")
+        }
+    }
+    
+    
+    //MARK: Helper method
+    func getPathToImageDataInDocumentsDirectory() -> String {
+        let url = NSURL(string: photoPath!)!
+        let path = url.lastPathComponent!
+        let documentsDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
+        let fullURL = documentsDirectoryURL.URLByAppendingPathComponent(path)
+
+        return fullURL.path!
+    }
+    
 }

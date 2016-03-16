@@ -14,6 +14,7 @@ class Pin : NSManagedObject, MKAnnotation {
     @NSManaged var longitude : NSNumber
     @NSManaged var latitude : NSNumber
     @NSManaged var totalPictureCount : Int
+    @NSManaged var currentPage : Int
     @NSManaged var photos : [Photo]
     
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
@@ -29,6 +30,7 @@ class Pin : NSManagedObject, MKAnnotation {
         
         latitude = NSNumber(double: lat)
         longitude = NSNumber(double: lon)
+        currentPage = 1
 
     }
     
@@ -45,4 +47,45 @@ class Pin : NSManagedObject, MKAnnotation {
         longitude = newCoordinate.longitude
     }
     
+    var maxPage : Int {
+        return totalPictureCount / VTClient.Constants.FLICKR_PER_PAGE
+    }
+    
+    override func prepareForDeletion() {
+        for photo in photos as NSArray {
+            let p = photo as! Photo
+            let fileManager = NSFileManager.defaultManager()
+            let fullPath = getPathToImageDataInDocumentsDirectory(p.photoPath)
+            do {
+                try fileManager.removeItemAtPath(fullPath)
+            } catch {
+                print("Deleting pin. Unable to delete image data with associated path.  Image maybe did not finish downloading")
+            }
+        }
+    }
+    
+    
+    //MARK: Helper method
+    func getPathToImageDataInDocumentsDirectory(photoPath: String?) -> String {
+        let url = NSURL(string: photoPath!)!
+        let path = url.lastPathComponent!
+        let documentsDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
+        let fullURL = documentsDirectoryURL.URLByAppendingPathComponent(path)
+        
+        return fullURL.path!
+    }
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

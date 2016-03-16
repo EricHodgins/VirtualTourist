@@ -264,8 +264,34 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     
+    
+    //MARK: Load a new Collection
     func loadNewPhotoPage() {
         print("\(pin.totalPictureCount)")
+        
+        if pin.maxPage > pin.currentPage {
+            pin.currentPage++
+        } else {
+            pin.currentPage = 1
+        }
+        
+        
+        VTClient.sharedInstance.getPhotosFromFlick(Double(pin.latitude), lon: Double(pin.longitude), page: pin.currentPage) { (success, photoResults, pictureCount, errorString) -> Void in
+            if success {
+                self.pin.totalPictureCount = pictureCount
+                for pic in photoResults! {
+                    let photo = Photo(imagePath: pic["url_m"] as! String, context: self.sharedContext)
+                    self.pin.totalPictureCount = pictureCount
+                    photo.pin = self.pin
+                }
+                
+                self.sharedContext.performBlock({ () -> Void in
+                    CoreDataStackManager.sharedInstance.saveContext()
+                })
+                
+            }
+        }
+
     }
     
 }

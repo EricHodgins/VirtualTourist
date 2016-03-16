@@ -35,8 +35,8 @@ extension VTClient {
             
             
             if let results = JSONResults["photos"] as? [String : AnyObject] {
+                //Get the total number of photos associated with the pins lat and lon values (used for max page in parameters)
                 let max = results["total"] as? String
-                print("max photos results = \(max)")
                 if let photos = results["photo"] as? [[String : AnyObject]] {
                     completionHandler(success: true, results: photos, pictureCount: Int(max!)!, errorString: nil)
                     return
