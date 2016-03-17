@@ -150,7 +150,6 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         
         configureCell(cell, photo: photo, indexPath: indexPath)
         
-        
         return cell
     }
     
@@ -213,6 +212,12 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
         let cell = collectionView.cellForItemAtIndexPath(indexPath) as! CustomCollectionViewCell
+        
+        // Make sure the picture finishes downloading before it can be selected or unselected
+        guard cell.imageView.image != nil else {
+            return
+        }
+        
         let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
         
         if let index = selectedIndexes.indexOf(indexPath) {
