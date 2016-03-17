@@ -13,6 +13,12 @@ private let cellSpacing: CGFloat = 1
 
 class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, NSFetchedResultsControllerDelegate {
     
+    @IBOutlet weak var indicatorLabel: UILabel!
+    @IBOutlet weak var activityView: UIActivityIndicatorView!
+    
+    @IBOutlet weak var indicatorView: UIView!
+    
+    
     var selectedIndexes = [NSIndexPath]()
     var insertedIndexPaths: [NSIndexPath]!
     var deletedIndexPaths: [NSIndexPath]!

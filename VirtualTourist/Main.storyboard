@@ -144,24 +144,53 @@
                                 <rect key="frame" x="248" y="561" width="104" height="30"/>
                                 <state key="normal" title="New Collection"/>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aCu-cm-ZRr">
+                                <rect key="frame" x="20" y="155" width="560" height="289"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Finding Photos..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JPk-rg-7av">
+                                        <rect key="frame" x="216" y="8" width="128" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Glk-kQ-Js5">
+                                        <rect key="frame" x="261" y="37" width="37" height="37"/>
+                                        <color key="color" red="0.19215686269999999" green="0.2901960784" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
+                                    </activityIndicatorView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="Glk-kQ-Js5" firstAttribute="top" secondItem="JPk-rg-7av" secondAttribute="bottom" constant="8" id="03J-Pj-JtY"/>
+                                    <constraint firstItem="Glk-kQ-Js5" firstAttribute="centerX" secondItem="JPk-rg-7av" secondAttribute="centerX" id="IJy-kR-h4F"/>
+                                    <constraint firstItem="JPk-rg-7av" firstAttribute="centerX" secondItem="aCu-cm-ZRr" secondAttribute="centerX" id="sRk-0a-gp0"/>
+                                    <constraint firstItem="JPk-rg-7av" firstAttribute="top" secondItem="aCu-cm-ZRr" secondAttribute="top" constant="8" id="uYN-8x-WwI"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="emm-Rf-Oms" secondAttribute="trailing" constant="-20" id="0KU-eA-D3z"/>
+                            <constraint firstItem="aCu-cm-ZRr" firstAttribute="centerY" secondItem="v6F-dY-d5g" secondAttribute="centerY" constant="-8.5" id="6Kv-OT-POQ"/>
                             <constraint firstItem="uYl-ou-piq" firstAttribute="top" secondItem="emm-Rf-Oms" secondAttribute="bottom" constant="-39" id="Gdc-bg-wnC"/>
+                            <constraint firstItem="v6F-dY-d5g" firstAttribute="top" secondItem="aCu-cm-ZRr" secondAttribute="bottom" constant="-379" id="HDL-f8-5hU"/>
                             <constraint firstItem="emm-Rf-Oms" firstAttribute="top" secondItem="v6F-dY-d5g" secondAttribute="bottom" id="Hg5-Cb-08t"/>
                             <constraint firstItem="emm-Rf-Oms" firstAttribute="leading" secondItem="psu-hf-ySg" secondAttribute="leadingMargin" constant="-20" id="Kbm-Ot-nwl"/>
+                            <constraint firstItem="aCu-cm-ZRr" firstAttribute="centerX" secondItem="v6F-dY-d5g" secondAttribute="centerX" id="MJG-On-F7M"/>
                             <constraint firstItem="v6F-dY-d5g" firstAttribute="leading" secondItem="psu-hf-ySg" secondAttribute="leadingMargin" constant="-16" id="X7h-Rr-G0X"/>
                             <constraint firstItem="qH7-uJ-G3q" firstAttribute="top" secondItem="emm-Rf-Oms" secondAttribute="bottom" id="ZRJ-H6-hD4"/>
                             <constraint firstItem="v6F-dY-d5g" firstAttribute="top" secondItem="xRK-hD-7sr" secondAttribute="bottom" constant="1" id="aId-Zh-GXa"/>
+                            <constraint firstItem="aCu-cm-ZRr" firstAttribute="leading" secondItem="v6F-dY-d5g" secondAttribute="trailing" constant="-576" id="aaK-IT-e95"/>
                             <constraint firstItem="uYl-ou-piq" firstAttribute="centerX" secondItem="emm-Rf-Oms" secondAttribute="centerX" id="aqb-J8-H3T"/>
                             <constraint firstAttribute="trailingMargin" secondItem="v6F-dY-d5g" secondAttribute="trailing" constant="-16" id="jcZ-kX-Epy"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="4SF-To-W3n"/>
                     <connections>
+                        <outlet property="activityView" destination="Glk-kQ-Js5" id="PaU-dW-kPi"/>
                         <outlet property="collectionView" destination="v6F-dY-d5g" id="JPj-b7-pha"/>
                         <outlet property="flowLayout" destination="QUB-bl-hAy" id="oon-ha-548"/>
+                        <outlet property="indicatorLabel" destination="JPk-rg-7av" id="6sq-VI-zRc"/>
+                        <outlet property="indicatorView" destination="aCu-cm-ZRr" id="L8Q-Wc-rsY"/>
                         <outlet property="newCollectionButton" destination="uYl-ou-piq" id="Edo-gm-Kvz"/>
                     </connections>
                 </viewController>
