@@ -56,13 +56,30 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
                 
                 self.sharedContext.performBlock({ () -> Void in
                     CoreDataStackManager.sharedInstance.saveContext()
+                    
+                    //Prefetch the matching photos
+                    self.prefetchPhotosForPin(pin)
                 })
 
             }
         }
     }
     
-    
+   
+    //MARK: Pre-fetch photo data
+    func prefetchPhotosForPin(pin : Pin) {
+        for p in pin.photos as NSArray {
+            let photo = p as! Photo
+            
+            VTClient.sharedInstance.taskForImageDataWithURL(photo.photoPath!, completionHandler: { (imageData, error) -> Void in
+                if error != nil {
+                    return
+                }
+                
+                photo.flickrImage = UIImage(data: imageData!)
+            })
+        }
+    }
     
     
     

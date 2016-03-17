@@ -52,7 +52,7 @@ class Photo : NSManagedObject {
         do {
             try fileManager.removeItemAtPath(fullPath)
         } catch {
-            print("Unable to delete image files in documentary folder...the image may not of finished downloading")
+            //print("Unable to delete image files in documentary folder...the image may not of finished downloading")
         }
     }
     

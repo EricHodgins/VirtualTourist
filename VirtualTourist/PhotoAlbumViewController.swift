@@ -95,13 +95,15 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         return sectionInfo.numberOfObjects
     }
     
+    
+    //MARK: Configure Cells
     func configureCell(cell: CustomCollectionViewCell, photo: Photo, indexPath: NSIndexPath) {
         //check if photo path already exists
         
         cell.imageView!.image = nil
         
         if photo.photoPath == nil || photo.photoPath == "" {
-
+            print("no photo path ")
         } else if photo.flickrImage != nil {
             cell.view.hidden = true
             cell.activityViewIndicator.stopAnimating()
@@ -118,6 +120,9 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
                 photo.flickrImage = UIImage(data: imageData!)
                 
                 dispatch_sync(dispatch_get_main_queue()) {
+                    //Make sure the cell is visible before loading the image. Otherwise whe it gets reused the image could be filled with the wrong photos
+                    //and you'll get images that keep changing until all photos are finished downloading
+                    
                     let visCell = self.collectionView.cellForItemAtIndexPath(indexPath) as? CustomCollectionViewCell
                     if visCell != nil {
                         visCell!.view.hidden = true
@@ -270,7 +275,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     
     //MARK: Load a new Collection
     func loadNewPhotoPage() {
-        print("\(pin.totalPictureCount)")
+
         deleteCollectionPhotos()
         
         //Make sure pages don't exceed the total amount of pictures available
