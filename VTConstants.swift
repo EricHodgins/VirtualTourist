@@ -35,4 +35,8 @@ extension VTClient {
     struct Methods {
         static let FlickrSearch = "method=flickr.photos.search"
     }
+    
+    struct NotificationKeys {
+        static let finishedDownloadingURLsNotificationKey = "com.erichodgins.finishedDownloadingURLsNotificationKey"
+    }
 }

@@ -15,8 +15,8 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     
     @IBOutlet weak var indicatorLabel: UILabel!
     @IBOutlet weak var activityView: UIActivityIndicatorView!
-    
     @IBOutlet weak var indicatorView: UIView!
+
     
     
     var selectedIndexes = [NSIndexPath]()
@@ -34,12 +34,20 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         print("view did load albumVC")
+        print("number of item in collectionview: \(collectionView.numberOfItemsInSection(0))")
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideDownloadIndicators", name: VTClient.NotificationKeys.finishedDownloadingURLsNotificationKey, object: nil)
         
         collectionView.delegate = self
         collectionView.dataSource = self
         
         
         try! fetchedResultsController.performFetch()
+        
+        if fetchedResultsController.fetchedObjects?.count == 0 {
+            showDownloadIndicators()
+        }
+        
         
         fetchedResultsController.delegate = self
         updateBottomButton()
@@ -53,6 +61,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         print("view did disappear")
         super.viewWillDisappear(animated)
         
+        //Need to cancel any network task associated with this controller otherwise when the pin is updated in the map before the tasks have finished an error will occur. "session task will try to unwrap an optional but it is nil."
         for cell in collectionView.visibleCells() as! [CustomCollectionViewCell] {
             cell.taskToCancelifCellIsReused?.cancel()
         }
@@ -60,6 +69,25 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     
     deinit {
         print("photo album has been deinitted.")
+    }
+    
+    func showDownloadIndicators() {
+        indicatorView.hidden = false
+        indicatorLabel.hidden = false
+        activityView.startAnimating()
+    }
+    
+    func hideDownloadIndicators() {
+        print("photos urls have been downloaded")
+        
+        if fetchedResultsController.fetchedObjects?.count != 0 {
+            indicatorView.hidden = true
+            indicatorLabel.hidden = true
+            activityView.stopAnimating()
+        } else {
+            indicatorLabel.text = "Bummer, there's no photos."
+            activityView.stopAnimating()
+        }
     }
     
     func adjustCellDimensions() {
@@ -168,6 +196,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     //MARK: NSFetchedController Delegate
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
         print("controller will change content")
+        
         insertedIndexPaths = [NSIndexPath]()
         deletedIndexPaths = [NSIndexPath]()
         updatedIndexPaths = [NSIndexPath]()
@@ -281,6 +310,8 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     
     //MARK: Load a new Collection
     func loadNewPhotoPage() {
+        
+        showDownloadIndicators()
 
         deleteCollectionPhotos()
         
@@ -299,6 +330,10 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
                     let photo = Photo(imagePath: pic["url_m"] as! String, context: self.sharedContext)
                     self.pin.totalPictureCount = pictureCount
                     photo.pin = self.pin
+                }
+                
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.hideDownloadIndicators()
                 }
                 
                 self.sharedContext.performBlock({ () -> Void in

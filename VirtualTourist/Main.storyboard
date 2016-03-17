@@ -144,10 +144,10 @@
                                 <rect key="frame" x="248" y="561" width="104" height="30"/>
                                 <state key="normal" title="New Collection"/>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aCu-cm-ZRr">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aCu-cm-ZRr">
                                 <rect key="frame" x="20" y="155" width="560" height="289"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Finding Photos..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JPk-rg-7av">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Finding Photos..." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JPk-rg-7av">
                                         <rect key="frame" x="216" y="8" width="128" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -158,7 +158,7 @@
                                         <color key="color" red="0.19215686269999999" green="0.2901960784" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
                                     </activityIndicatorView>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="Glk-kQ-Js5" firstAttribute="top" secondItem="JPk-rg-7av" secondAttribute="bottom" constant="8" id="03J-Pj-JtY"/>
                                     <constraint firstItem="Glk-kQ-Js5" firstAttribute="centerX" secondItem="JPk-rg-7av" secondAttribute="centerX" id="IJy-kR-h4F"/>
@@ -189,7 +189,7 @@
                         <outlet property="activityView" destination="Glk-kQ-Js5" id="PaU-dW-kPi"/>
                         <outlet property="collectionView" destination="v6F-dY-d5g" id="JPj-b7-pha"/>
                         <outlet property="flowLayout" destination="QUB-bl-hAy" id="oon-ha-548"/>
-                        <outlet property="indicatorLabel" destination="JPk-rg-7av" id="6sq-VI-zRc"/>
+                        <outlet property="indicatorLabel" destination="JPk-rg-7av" id="fzK-yq-WUb"/>
                         <outlet property="indicatorView" destination="aCu-cm-ZRr" id="L8Q-Wc-rsY"/>
                         <outlet property="newCollectionButton" destination="uYl-ou-piq" id="Edo-gm-Kvz"/>
                     </connections>

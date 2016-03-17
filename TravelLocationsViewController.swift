@@ -24,6 +24,8 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "urlsDone", name: VTClient.NotificationKeys.finishedDownloadingURLsNotificationKey, object: nil)
+        
         //Get the orignal view frame to restore back to normal whent the view is moved to show the pins can be removed
         originalFrame = self.view.frame
         
@@ -43,6 +45,10 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
         
     }
     
+    func urlsDone() {
+        print("finished downloading")
+    }
+    
     
     //MARK: Download Flickr Photos
     func downloadFlickrPhotos(withLatitude latitude: Double, andLongitude longitude: Double, pin: Pin) {
@@ -54,9 +60,13 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
                     photo.pin = pin
                 }
                 
+                // Notifiy on the main queue because this will ultimately update the UI (indicatorviews) in the PhotoAlbumViewController
+                dispatch_async(dispatch_get_main_queue()) {
+                    NSNotificationCenter.defaultCenter().postNotificationName(VTClient.NotificationKeys.finishedDownloadingURLsNotificationKey, object: self)
+                }
+                
                 self.sharedContext.performBlock({ () -> Void in
                     CoreDataStackManager.sharedInstance.saveContext()
-                    
                     //Prefetch the matching photos
                     self.prefetchPhotosForPin(pin)
                 })
