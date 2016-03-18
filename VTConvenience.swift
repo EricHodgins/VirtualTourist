@@ -13,7 +13,7 @@ extension VTClient {
     //MARK: GET
     
     //Get photos from flickr
-    func getPhotosFromFlick(lat : Double, lon : Double, page : Int, completionHandler: (success: Bool, results: [[String : AnyObject]]?, pictureCount: Int, errorString: String?) -> Void) {
+    func getPhotosFromFlick(lat : Double, lon : Double, page : Int, completionHandler: (success: Bool, results: [[String : AnyObject]]?, pictureCount: Int, errorString: String?) -> Void) -> NSURLSessionTask? {
         
         // setup the parameters
         let parameters: [String : AnyObject] = [
@@ -27,7 +27,7 @@ extension VTClient {
             VTClient.ParameterKeys.nojsoncallback : "1"
         ]
         
-        taskForFlickrGETPhotos(VTClient.Methods.FlickrSearch, parameters: parameters) { (JSONResults, error) -> Void in
+        return taskForFlickrGETPhotos(VTClient.Methods.FlickrSearch, parameters: parameters) { (JSONResults, error) -> Void in
             if let error = error {
                 completionHandler(success: false, results: nil, pictureCount: 0, errorString: error.localizedDescription)
                 return

@@ -19,6 +19,7 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
     var finishedDraggingMapPin : Bool = true
     var originalFrame = CGRect()
     var mapViewIsEditable : Bool = false
+    var pinHasFinishedDownloadingURLS : Bool = true
     
 
     override func viewDidLoad() {
@@ -52,6 +53,7 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
     
     //MARK: Download Flickr Photos
     func downloadFlickrPhotos(withLatitude latitude: Double, andLongitude longitude: Double, pin: Pin) {
+        pinHasFinishedDownloadingURLS = false
         VTClient.sharedInstance.getPhotosFromFlick(latitude, lon: longitude, page: pin.currentPage) { (success, photoResults, pictureCount, errorString) -> Void in
             if success {
                 pin.totalPictureCount = pictureCount
@@ -59,6 +61,8 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
                     let photo = Photo(imagePath: pic["url_m"] as! String, context: self.sharedContext)
                     photo.pin = pin
                 }
+                
+                self.pinHasFinishedDownloadingURLS = true
                 
                 // Notifiy on the main queue because this will ultimately update the UI (indicatorviews) in the PhotoAlbumViewController
                 dispatch_async(dispatch_get_main_queue()) {
@@ -195,6 +199,7 @@ extension TravelLocationsViewController {
         if finishedDraggingMapPin && !mapViewIsEditable {
             let photoViewController = storyboard?.instantiateViewControllerWithIdentifier("PhotoAlbum") as! PhotoAlbumViewController
             photoViewController.pin  = view.annotation as! Pin
+            photoViewController.pinHasFinishedDownloadingURLS = pinHasFinishedDownloadingURLS
             navigationController?.pushViewController(photoViewController, animated: true)
         }
     }
@@ -233,8 +238,4 @@ extension TravelLocationsViewController {
         }
     }
     
-    
-    func deletePin(pin : Pin) {
-        
-    }
 }

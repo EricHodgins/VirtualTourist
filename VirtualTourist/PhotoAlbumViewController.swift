@@ -16,6 +16,8 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     @IBOutlet weak var indicatorLabel: UILabel!
     @IBOutlet weak var activityView: UIActivityIndicatorView!
     @IBOutlet weak var indicatorView: UIView!
+    var pinHasFinishedDownloadingURLS: Bool = true
+    var newCollectionNetworkTask: NSURLSessionTask?
 
     
     
@@ -34,7 +36,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         print("view did load albumVC")
-        print("number of item in collectionview: \(collectionView.numberOfItemsInSection(0))")
+        print("number of item in collectionview: \(collectionView.numberOfItemsInSection(0)), \(pinHasFinishedDownloadingURLS)")
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideDownloadIndicators", name: VTClient.NotificationKeys.finishedDownloadingURLsNotificationKey, object: nil)
         
@@ -44,12 +46,14 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         
         try! fetchedResultsController.performFetch()
         
-        if fetchedResultsController.fetchedObjects?.count == 0 {
+        fetchedResultsController.delegate = self
+        
+        if pinHasFinishedDownloadingURLS {
+            hideDownloadIndicators()
+        } else {
             showDownloadIndicators()
         }
         
-        
-        fetchedResultsController.delegate = self
         updateBottomButton()
     }
     
@@ -61,7 +65,14 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         print("view did disappear")
         super.viewWillDisappear(animated)
         
-        //Need to cancel any network task associated with this controller otherwise when the pin is updated in the map before the tasks have finished an error will occur. "session task will try to unwrap an optional but it is nil."
+        cancelAllCellNetworkTasks()
+    }
+    
+    
+    //Need to cancel any network task associated with this controller otherwise when the pin is updated in the map before the tasks have finished an error will occur. "session task will try to unwrap an optional but it is nil."
+    func cancelAllCellNetworkTasks() {
+        newCollectionNetworkTask?.cancel()
+        
         for cell in collectionView.visibleCells() as! [CustomCollectionViewCell] {
             cell.taskToCancelifCellIsReused?.cancel()
         }
@@ -73,18 +84,20 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     
     func showDownloadIndicators() {
         indicatorView.hidden = false
+        indicatorLabel.text = "Finding photos..."
         indicatorLabel.hidden = false
         activityView.startAnimating()
     }
     
     func hideDownloadIndicators() {
-        print("photos urls have been downloaded")
+        print("photos urls have been downloaded: \(fetchedResultsController.fetchedObjects?.count), \(pin.photos.count)")
         
-        if fetchedResultsController.fetchedObjects?.count != 0 {
+        if pin.photos.count != 0 {
             indicatorView.hidden = true
             indicatorLabel.hidden = true
             activityView.stopAnimating()
         } else {
+            indicatorView.hidden = false
             indicatorLabel.text = "Bummer, there's no photos."
             activityView.stopAnimating()
         }
@@ -311,6 +324,8 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     //MARK: Load a new Collection
     func loadNewPhotoPage() {
         
+        cancelAllCellNetworkTasks()
+        
         showDownloadIndicators()
 
         deleteCollectionPhotos()
@@ -323,7 +338,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         }
         
         
-        VTClient.sharedInstance.getPhotosFromFlick(Double(pin.latitude), lon: Double(pin.longitude), page: pin.currentPage) { (success, photoResults, pictureCount, errorString) -> Void in
+        newCollectionNetworkTask =  VTClient.sharedInstance.getPhotosFromFlick(Double(pin.latitude), lon: Double(pin.longitude), page: pin.currentPage) { (success, photoResults, pictureCount, errorString) -> Void in
             if success {
                 self.pin.totalPictureCount = pictureCount
                 for pic in photoResults! {
@@ -332,12 +347,12 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
                     photo.pin = self.pin
                 }
                 
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.hideDownloadIndicators()
-                }
-                
                 self.sharedContext.performBlock({ () -> Void in
                     CoreDataStackManager.sharedInstance.saveContext()
+                    
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.hideDownloadIndicators()
+                    }
                 })
                 
             }
@@ -345,6 +360,8 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
 
     }
     
+    
+    //MARK: Delete the old previous collection photos
     func deleteCollectionPhotos() {
         for p in pin.photos as NSArray {
             let photo = p as! Photo
