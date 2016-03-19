@@ -324,6 +324,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     //MARK: Load a new Collection
     func loadNewPhotoPage() {
         
+        newCollectionButton.enabled = false
         cancelAllCellNetworkTasks()
         
         showDownloadIndicators()
@@ -352,6 +353,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
                     
                     dispatch_async(dispatch_get_main_queue()) {
                         self.hideDownloadIndicators()
+                        self.newCollectionButton.enabled = true
                     }
                 })
                 
