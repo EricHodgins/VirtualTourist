@@ -25,6 +25,8 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        loadInPreviousSavedMapRegion()
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "urlsDone", name: VTClient.NotificationKeys.finishedDownloadingURLsNotificationKey, object: nil)
         
         //Get the orignal view frame to restore back to normal whent the view is moved to show the pins can be removed
@@ -238,4 +240,63 @@ extension TravelLocationsViewController {
         }
     }
     
+    
+    
+    
+    //MARK: Saving Map Region
+    var mapViewDataFilePath : String {
+        let manager = NSFileManager.defaultManager()
+        let url = manager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first! 
+        return url.URLByAppendingPathComponent("mapViewSavedData").path!
+    }
+    
+    
+    func mapView(mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        saveMapRegion()
+    }
+    
+    
+    func saveMapRegion() {
+        print("center: \(mapView.region.center.latitude), \(mapView.region.center.longitude)")
+        print("span: \(mapView.region.span.latitudeDelta), \(mapView.region.span.longitudeDelta)")
+        
+        let regionDict = [
+            "latitude" : mapView.region.center.latitude,
+            "longitude" : mapView.region.center.longitude,
+            "latitudeDelta" : mapView.region.span.latitudeDelta,
+            "longitudeDelta" : mapView.region.span.longitudeDelta
+        ]
+        
+        NSKeyedArchiver.archiveRootObject(regionDict, toFile: mapViewDataFilePath)
+        
+    }
+    
+    func loadInPreviousSavedMapRegion() {
+        
+        if let region = NSKeyedUnarchiver.unarchiveObjectWithFile(mapViewDataFilePath) as? [String: AnyObject] {
+        
+            let latitude = region["latitude"] as! CLLocationDegrees
+            let longitude = region["longitude"] as! CLLocationDegrees
+            let center = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+            
+            let latDelta = region["latitudeDelta"] as! CLLocationDegrees
+            let lonDelta = region["longitudeDelta"] as! CLLocationDegrees
+            let span = MKCoordinateSpanMake(latDelta, lonDelta)
+            
+            let savedRegion = MKCoordinateRegion(center: center, span: span)
+            
+            mapView.setRegion(savedRegion, animated: true)
+            mapView.setCenterCoordinate(center, animated: true)
+            
+        }
+        
+    }
+    
 }
+
+
+
+
+
+
+
