@@ -45,12 +45,13 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         
         let lat = pin.latitude as CLLocationDegrees
         let lon = pin.longitude as CLLocationDegrees
-        let latDelta = 1.0 as CLLocationDegrees
-        let lonDelta = 1.0 as CLLocationDegrees
+        let latDelta = 0.5 as CLLocationDegrees
+        let lonDelta = 0.5 as CLLocationDegrees
         let center = CLLocationCoordinate2D(latitude: lat, longitude: lon)
         let span = MKCoordinateSpan(latitudeDelta: latDelta, longitudeDelta: lonDelta)
         let region = MKCoordinateRegion(center: center, span: span)
         mapView.setRegion(region, animated: true)
+        mapView.addAnnotation(pin)
         
         
         
