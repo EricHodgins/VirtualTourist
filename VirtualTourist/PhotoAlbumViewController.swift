@@ -37,17 +37,20 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("view did load albumVC")
-        print("number of item in collectionview: \(collectionView.numberOfItemsInSection(0)), \(pinHasFinishedDownloadingURLS)")
+
+        setupMapRegion()
         
+        // This notification is used when the pin is dropped in the map but it has not yet finished downloading the image urls from Flickr
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideDownloadIndicators", name: VTClient.NotificationKeys.finishedDownloadingURLsNotificationKey, object: nil)
         
         collectionView.delegate = self
         collectionView.dataSource = self
         
-        
-        try! fetchedResultsController.performFetch()
-        
+        do {
+            try fetchedResultsController.performFetch()
+        }
+        catch {}
+            
         fetchedResultsController.delegate = self
         
         if pinHasFinishedDownloadingURLS {
@@ -76,7 +79,6 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     override func viewWillDisappear(animated: Bool) {
-        print("view did disappear")
         super.viewWillDisappear(animated)
         
         cancelAllCellNetworkTasks()
@@ -93,7 +95,6 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     deinit {
-        print("photo album has been deinitted.")
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
@@ -105,7 +106,6 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     func hideDownloadIndicators() {
-        print("photos urls have been downloaded: \(fetchedResultsController.fetchedObjects?.count), \(pin.photos.count)")
         
         if pin.photos.count != 0 {
             indicatorView.hidden = true
@@ -223,15 +223,13 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     
     //MARK: NSFetchedController Delegate
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
-        print("controller will change content")
-        
         insertedIndexPaths = [NSIndexPath]()
         deletedIndexPaths = [NSIndexPath]()
         updatedIndexPaths = [NSIndexPath]()
     }
     
     func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
-        print("Controller did change section")
+
     }
     
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
@@ -317,7 +315,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     func deleteSelectedPhotos() {
-        print("delete selected photos")
+
         var photosToDelete = [Photo]()
         
         for indexPath in selectedIndexes {

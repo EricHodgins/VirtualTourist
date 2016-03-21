@@ -105,6 +105,9 @@
 			isa = PBXGroup;
 			children = (
 				7A1336631C894BC200934E2E /* CustomCollectionViewCell.swift */,
+				7A0AFC231C8B9C2A007DD6D2 /* Main.storyboard */,
+				7A13B98D1C8690B300B506A3 /* LaunchScreen.storyboard */,
+				7A13B98B1C8690B300B506A3 /* Assets.xcassets */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -116,6 +119,42 @@
 				7A13B9BB1C86993500B506A3 /* PhotoAlbumViewController.swift */,
 			);
 			name = Controller;
+			sourceTree = "<group>";
+		};
+		7A0B89401C9F9ACB00FDD8AE /* Core Data */ = {
+			isa = PBXGroup;
+			children = (
+				7A0ED5AA1C8D503F002694C3 /* VirtualTouristModel.xcdatamodeld */,
+				7A0B31A21C8E8CEF00B13C30 /* Pin.swift */,
+				7A0B31A41C8E91F700B13C30 /* Photo.swift */,
+			);
+			name = "Core Data";
+			sourceTree = "<group>";
+		};
+		7A0B89411C9F9AE200FDD8AE /* Client */ = {
+			isa = PBXGroup;
+			children = (
+				7A159A431C87FA5C00B178AA /* VTClient.swift */,
+				7A159A461C87FD9F00B178AA /* VTConstants.swift */,
+				7A159A481C88039900B178AA /* VTConvenience.swift */,
+			);
+			name = Client;
+			sourceTree = "<group>";
+		};
+		7A0B89421C9F9B0400FDD8AE /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				7A0BB5A91C913D57009D555C /* ImageCache.swift */,
+			);
+			name = Cache;
+			sourceTree = "<group>";
+		};
+		7A0B89431C9F9B3C00FDD8AE /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				7A0CC60C1C9E40B7003287B1 /* MapRegion.swift */,
+			);
+			name = Map;
 			sourceTree = "<group>";
 		};
 		7A13B9751C8690B300B506A3 = {
@@ -148,9 +187,6 @@
 				7A159A451C87FC6100B178AA /* Model */,
 				7A0AFC291C8C0D40007DD6D2 /* View */,
 				7A0AFC2A1C8C0D73007DD6D2 /* Controller */,
-				7A0AFC231C8B9C2A007DD6D2 /* Main.storyboard */,
-				7A13B98B1C8690B300B506A3 /* Assets.xcassets */,
-				7A13B98D1C8690B300B506A3 /* LaunchScreen.storyboard */,
 				7A13B9901C8690B300B506A3 /* Info.plist */,
 			);
 			path = VirtualTourist;
@@ -185,14 +221,10 @@
 		7A159A451C87FC6100B178AA /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				7A159A431C87FA5C00B178AA /* VTClient.swift */,
-				7A0ED5AA1C8D503F002694C3 /* VirtualTouristModel.xcdatamodeld */,
-				7A159A461C87FD9F00B178AA /* VTConstants.swift */,
-				7A159A481C88039900B178AA /* VTConvenience.swift */,
-				7A0BB5A91C913D57009D555C /* ImageCache.swift */,
-				7A0B31A21C8E8CEF00B13C30 /* Pin.swift */,
-				7A0B31A41C8E91F700B13C30 /* Photo.swift */,
-				7A0CC60C1C9E40B7003287B1 /* MapRegion.swift */,
+				7A0B89411C9F9AE200FDD8AE /* Client */,
+				7A0B89401C9F9ACB00FDD8AE /* Core Data */,
+				7A0B89431C9F9B3C00FDD8AE /* Map */,
+				7A0B89421C9F9B0400FDD8AE /* Cache */,
 			);
 			name = Model;
 			sourceTree = "<group>";

@@ -21,7 +21,7 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
     var mapViewIsEditable : Bool = false
     var pinHasFinishedDownloadingURLS : Bool = true
     
-    var taskForURLDownload : NSURLSessionTask? // Get a reference to the URL downloads in case it needs to be cancelled upon pin update
+    var taskForURLDownload : NSURLSessionTask? // Get a reference to the URL downloads in case it needs to be cancelled upon pin update (when it's moved to a different location)
     var tasksForImageDataDownloads = [NSURLSessionTask]() // Get a reference to all imageData downloads for each imageURL.  These need to be cancelled upon pin update
     
 
@@ -34,8 +34,10 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
         //Get the orignal view frame to restore back to normal whent the view is moved to show the pins can be removed
         originalFrame = self.view.frame
         
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {}
         
-        try! fetchedResultsController.performFetch()
         addCoreDataSavedPinsToMapView()
         
         
@@ -43,10 +45,8 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
         
         // Gesture to add Pin annotation to the mapView
         let longGestureRecognizer = UILongPressGestureRecognizer(target: self, action: "addAnnotation:")
-        longGestureRecognizer.minimumPressDuration = 1.0
+        longGestureRecognizer.minimumPressDuration = 0.75
         mapView.addGestureRecognizer(longGestureRecognizer)
-        
-
         
     }
     
@@ -136,7 +136,7 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
 
 
 
-//MARK: MapView Delegate
+//MARK: MapView Delegate and Helper Methods
 extension TravelLocationsViewController {
     
     func addCoreDataSavedPinsToMapView() {
@@ -148,7 +148,7 @@ extension TravelLocationsViewController {
     
     func addAnnotation(gestureRecognizer : UIGestureRecognizer) {
         
-        if gestureRecognizer.state == .Began {
+        if gestureRecognizer.state == .Began && !mapViewIsEditable {
             let touchLocation = gestureRecognizer.locationInView(mapView)
             let mapCoordinates = mapView.convertPoint(touchLocation, toCoordinateFromView: mapView)
             
@@ -184,7 +184,7 @@ extension TravelLocationsViewController {
 
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        print("callout accessory tapped")
+
     }
     
     
