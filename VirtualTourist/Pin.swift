@@ -39,7 +39,9 @@ class Pin : NSManagedObject, MKAnnotation {
     }
     
     var title : String? {
-        return "\(latitude), \(longitude)"
+        let lat = String.localizedStringWithFormat("%.2f", Double(latitude))
+        let lon = String.localizedStringWithFormat("%.2f", Double(longitude))
+        return "\(lat), \(lon)"
     }
     
     func setCoordinate(newCoordinate: CLLocationCoordinate2D) {

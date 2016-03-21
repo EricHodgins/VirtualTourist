@@ -224,7 +224,7 @@ extension TravelLocationsViewController {
                 sharedContext.deleteObject(photo as! Photo)
             }
             
-            // Update the lat and lon values
+            // Update the lat and lon values set page number to 1 start over again
             pin.latitude = (view.annotation?.coordinate.latitude)!
             pin.longitude = (view.annotation?.coordinate.longitude)!
             pin.currentPage = 1
