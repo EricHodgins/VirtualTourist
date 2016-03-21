@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import MapKit
 
 private let cellSpacing: CGFloat = 1
 
@@ -20,6 +21,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     var newCollectionNetworkTask: NSURLSessionTask?
 
     
+    @IBOutlet weak var mapView: MKMapView!
     
     var selectedIndexes = [NSIndexPath]()
     var insertedIndexPaths: [NSIndexPath]!
@@ -39,6 +41,18 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         print("number of item in collectionview: \(collectionView.numberOfItemsInSection(0)), \(pinHasFinishedDownloadingURLS)")
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideDownloadIndicators", name: VTClient.NotificationKeys.finishedDownloadingURLsNotificationKey, object: nil)
+        
+        
+        let lat = pin.latitude as CLLocationDegrees
+        let lon = pin.longitude as CLLocationDegrees
+        let latDelta = 1.0 as CLLocationDegrees
+        let lonDelta = 1.0 as CLLocationDegrees
+        let center = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+        let span = MKCoordinateSpan(latitudeDelta: latDelta, longitudeDelta: lonDelta)
+        let region = MKCoordinateRegion(center: center, span: span)
+        mapView.setRegion(region, animated: true)
+        
+        
         
         collectionView.delegate = self
         collectionView.dataSource = self

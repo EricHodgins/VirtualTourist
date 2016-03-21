@@ -86,7 +86,7 @@
                                 <items/>
                             </tabBar>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="v6F-dY-d5g">
-                                <rect key="frame" x="4" y="65" width="592" height="486"/>
+                                <rect key="frame" x="4" y="161" width="592" height="390"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="QUB-bl-hAy">
                                     <size key="itemSize" width="134" height="125"/>
@@ -166,22 +166,38 @@
                                     <constraint firstItem="JPk-rg-7av" firstAttribute="top" secondItem="aCu-cm-ZRr" secondAttribute="top" constant="8" id="uYN-8x-WwI"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hPH-7c-yak">
+                                <rect key="frame" x="4" y="64" width="592" height="96"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="7LW-2Q-YKt">
+                                <rect key="frame" x="4" y="64" width="592" height="97"/>
+                            </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="emm-Rf-Oms" secondAttribute="trailing" constant="-20" id="0KU-eA-D3z"/>
-                            <constraint firstItem="aCu-cm-ZRr" firstAttribute="centerY" secondItem="v6F-dY-d5g" secondAttribute="centerY" constant="-8.5" id="6Kv-OT-POQ"/>
+                            <constraint firstItem="hPH-7c-yak" firstAttribute="top" secondItem="xRK-hD-7sr" secondAttribute="bottom" id="0oc-8z-TNn"/>
+                            <constraint firstItem="aCu-cm-ZRr" firstAttribute="centerY" secondItem="v6F-dY-d5g" secondAttribute="centerY" constant="-56.5" id="6Kv-OT-POQ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="7LW-2Q-YKt" secondAttribute="trailing" constant="-16" id="CxZ-gD-dyW"/>
                             <constraint firstItem="uYl-ou-piq" firstAttribute="top" secondItem="emm-Rf-Oms" secondAttribute="bottom" constant="-39" id="Gdc-bg-wnC"/>
-                            <constraint firstItem="v6F-dY-d5g" firstAttribute="top" secondItem="aCu-cm-ZRr" secondAttribute="bottom" constant="-379" id="HDL-f8-5hU"/>
+                            <constraint firstItem="v6F-dY-d5g" firstAttribute="top" secondItem="aCu-cm-ZRr" secondAttribute="bottom" constant="-283" id="HDL-f8-5hU"/>
                             <constraint firstItem="emm-Rf-Oms" firstAttribute="top" secondItem="v6F-dY-d5g" secondAttribute="bottom" id="Hg5-Cb-08t"/>
                             <constraint firstItem="emm-Rf-Oms" firstAttribute="leading" secondItem="psu-hf-ySg" secondAttribute="leadingMargin" constant="-20" id="Kbm-Ot-nwl"/>
+                            <constraint firstItem="v6F-dY-d5g" firstAttribute="top" secondItem="7LW-2Q-YKt" secondAttribute="bottom" id="KnS-gd-3nP"/>
                             <constraint firstItem="aCu-cm-ZRr" firstAttribute="centerX" secondItem="v6F-dY-d5g" secondAttribute="centerX" id="MJG-On-F7M"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="hPH-7c-yak" secondAttribute="trailing" constant="-16" id="Ps0-XP-ltp"/>
+                            <constraint firstItem="7LW-2Q-YKt" firstAttribute="top" secondItem="xRK-hD-7sr" secondAttribute="bottom" id="VUe-Mk-UVg"/>
                             <constraint firstItem="v6F-dY-d5g" firstAttribute="leading" secondItem="psu-hf-ySg" secondAttribute="leadingMargin" constant="-16" id="X7h-Rr-G0X"/>
                             <constraint firstItem="qH7-uJ-G3q" firstAttribute="top" secondItem="emm-Rf-Oms" secondAttribute="bottom" id="ZRJ-H6-hD4"/>
-                            <constraint firstItem="v6F-dY-d5g" firstAttribute="top" secondItem="xRK-hD-7sr" secondAttribute="bottom" constant="1" id="aId-Zh-GXa"/>
+                            <constraint firstItem="v6F-dY-d5g" firstAttribute="top" secondItem="xRK-hD-7sr" secondAttribute="bottom" constant="97" id="aId-Zh-GXa"/>
                             <constraint firstItem="aCu-cm-ZRr" firstAttribute="leading" secondItem="v6F-dY-d5g" secondAttribute="trailing" constant="-576" id="aaK-IT-e95"/>
                             <constraint firstItem="uYl-ou-piq" firstAttribute="centerX" secondItem="emm-Rf-Oms" secondAttribute="centerX" id="aqb-J8-H3T"/>
+                            <constraint firstItem="hPH-7c-yak" firstAttribute="leading" secondItem="psu-hf-ySg" secondAttribute="leadingMargin" constant="-16" id="imz-EO-ryt"/>
                             <constraint firstAttribute="trailingMargin" secondItem="v6F-dY-d5g" secondAttribute="trailing" constant="-16" id="jcZ-kX-Epy"/>
+                            <constraint firstItem="7LW-2Q-YKt" firstAttribute="leading" secondItem="psu-hf-ySg" secondAttribute="leadingMargin" constant="-16" id="nbW-cL-F3f"/>
+                            <constraint firstItem="v6F-dY-d5g" firstAttribute="top" secondItem="hPH-7c-yak" secondAttribute="bottom" constant="1" id="stv-8V-c1H"/>
+                            <constraint firstItem="hPH-7c-yak" firstAttribute="centerX" secondItem="psu-hf-ySg" secondAttribute="centerX" id="wcR-4F-xDk"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="4SF-To-W3n"/>
@@ -191,6 +207,7 @@
                         <outlet property="flowLayout" destination="QUB-bl-hAy" id="oon-ha-548"/>
                         <outlet property="indicatorLabel" destination="JPk-rg-7av" id="fzK-yq-WUb"/>
                         <outlet property="indicatorView" destination="aCu-cm-ZRr" id="L8Q-Wc-rsY"/>
+                        <outlet property="mapView" destination="7LW-2Q-YKt" id="nQR-et-93i"/>
                         <outlet property="newCollectionButton" destination="uYl-ou-piq" id="Edo-gm-Kvz"/>
                     </connections>
                 </viewController>
