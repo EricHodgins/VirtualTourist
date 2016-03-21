@@ -117,9 +117,8 @@
 		7A0AFC2A1C8C0D73007DD6D2 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				7A13B9B41C86942B00B506A3 /* TravelLocationsViewController.swift */,
-				7A0B89441C9FA83900FDD8AE /* MapViewController.swift */,
-				7A13B9BB1C86993500B506A3 /* PhotoAlbumViewController.swift */,
+				7A0B89461C9FAA0600FDD8AE /* TravelLocation */,
+				7A0B89471C9FAA1600FDD8AE /* PhotoAlbum */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -128,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				7A0ED5AA1C8D503F002694C3 /* VirtualTouristModel.xcdatamodeld */,
+				7A13B9B21C8690EE00B506A3 /* CoreDataStackManager.swift */,
 				7A0B31A21C8E8CEF00B13C30 /* Pin.swift */,
 				7A0B31A41C8E91F700B13C30 /* Photo.swift */,
 			);
@@ -160,6 +160,23 @@
 			name = Map;
 			sourceTree = "<group>";
 		};
+		7A0B89461C9FAA0600FDD8AE /* TravelLocation */ = {
+			isa = PBXGroup;
+			children = (
+				7A13B9B41C86942B00B506A3 /* TravelLocationsViewController.swift */,
+				7A0B89441C9FA83900FDD8AE /* MapViewController.swift */,
+			);
+			name = TravelLocation;
+			sourceTree = "<group>";
+		};
+		7A0B89471C9FAA1600FDD8AE /* PhotoAlbum */ = {
+			isa = PBXGroup;
+			children = (
+				7A13B9BB1C86993500B506A3 /* PhotoAlbumViewController.swift */,
+			);
+			name = PhotoAlbum;
+			sourceTree = "<group>";
+		};
 		7A13B9751C8690B300B506A3 = {
 			isa = PBXGroup;
 			children = (
@@ -186,7 +203,6 @@
 			isa = PBXGroup;
 			children = (
 				7A13B9811C8690B300B506A3 /* AppDelegate.swift */,
-				7A13B9B21C8690EE00B506A3 /* CoreDataStackManager.swift */,
 				7A159A451C87FC6100B178AA /* Model */,
 				7A0AFC291C8C0D40007DD6D2 /* View */,
 				7A0AFC2A1C8C0D73007DD6D2 /* Controller */,
