@@ -80,6 +80,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     
     deinit {
         print("photo album has been deinitted.")
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     func showDownloadIndicators() {

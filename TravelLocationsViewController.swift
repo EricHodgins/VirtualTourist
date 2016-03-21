@@ -21,6 +21,9 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
     var mapViewIsEditable : Bool = false
     var pinHasFinishedDownloadingURLS : Bool = true
     
+    var taskForURLDownload : NSURLSessionTask? // Get a reference to the URL downloads in case it needs to be cancelled upon pin update
+    var tasksForImageDataDownloads = [NSURLSessionTask]() // Get a reference to all imageData downloads for each imageURL.  These need to be cancelled upon pin update
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,7 +54,7 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
     //MARK: Download Flickr Photos
     func downloadFlickrPhotos(withLatitude latitude: Double, andLongitude longitude: Double, pin: Pin) {
         pinHasFinishedDownloadingURLS = false
-        VTClient.sharedInstance.getPhotosFromFlick(latitude, lon: longitude, page: pin.currentPage) { (success, photoResults, pictureCount, errorString) -> Void in
+        taskForURLDownload =  VTClient.sharedInstance.getPhotosFromFlick(latitude, lon: longitude, page: pin.currentPage) { (success, photoResults, pictureCount, errorString) -> Void in
             if success {
                 pin.totalPictureCount = pictureCount
                 for pic in photoResults! {
@@ -82,13 +85,15 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
         for p in pin.photos as NSArray {
             let photo = p as! Photo
             
-            VTClient.sharedInstance.taskForImageDataWithURL(photo.photoPath!, completionHandler: { (imageData, error) -> Void in
+            let task = VTClient.sharedInstance.taskForImageDataWithURL(photo.photoPath!, completionHandler: { (imageData, error) -> Void in
                 if error != nil {
                     return
                 }
                 
                 photo.flickrImage = UIImage(data: imageData!)
             })
+            
+            self.tasksForImageDataDownloads.append(task)
         }
     }
     
@@ -209,6 +214,8 @@ extension TravelLocationsViewController {
         } else if newState == .Ending || newState == .Canceling {
             view.dragState = .None
             
+            cancelAnyNetworkTasksWhenPinIsUpated()
+            
             // Grab the reference to the Pin object
             let pin = view.annotation as! Pin
             
@@ -235,7 +242,14 @@ extension TravelLocationsViewController {
         }
     }
     
-    
+    // If any network requests are still active and the pin is updated to a new location an error can occur.  I beleive the NSURLSession tries to unwrap a nil optional.
+    func cancelAnyNetworkTasksWhenPinIsUpated() {
+        taskForURLDownload?.cancel()
+        
+        for task in tasksForImageDataDownloads {
+            task.cancel()
+        }
+    }
     
     
     //MARK: Saving Map Region
