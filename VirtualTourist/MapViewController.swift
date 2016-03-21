@@ -73,6 +73,12 @@ extension TravelLocationsViewController {
         
         // Make sure the pin is not being dragged & the mapView is not in Edit mode (deleting pins)
         if finishedDraggingMapPin && !mapViewIsEditable {
+            
+            //cancel any prefetching imageData (this will prevent an error occurring if reload collection is pressed and these network requests are not finished
+            for task in tasksForImageDataDownloads {
+                task.cancel()
+            }
+            
             let photoViewController = storyboard?.instantiateViewControllerWithIdentifier("PhotoAlbum") as! PhotoAlbumViewController
             photoViewController.pin  = view.annotation as! Pin
             photoViewController.pinHasFinishedDownloadingURLS = pinHasFinishedDownloadingURLS
