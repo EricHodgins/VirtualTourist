@@ -42,19 +42,6 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideDownloadIndicators", name: VTClient.NotificationKeys.finishedDownloadingURLsNotificationKey, object: nil)
         
-        
-        let lat = pin.latitude as CLLocationDegrees
-        let lon = pin.longitude as CLLocationDegrees
-        let latDelta = 0.5 as CLLocationDegrees
-        let lonDelta = 0.5 as CLLocationDegrees
-        let center = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-        let span = MKCoordinateSpan(latitudeDelta: latDelta, longitudeDelta: lonDelta)
-        let region = MKCoordinateRegion(center: center, span: span)
-        mapView.setRegion(region, animated: true)
-        mapView.addAnnotation(pin)
-        
-        
-        
         collectionView.delegate = self
         collectionView.dataSource = self
         
@@ -70,6 +57,18 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         }
         
         updateBottomButton()
+    }
+    
+    func setupMapRegion() {
+        let lat = pin.latitude as CLLocationDegrees
+        let lon = pin.longitude as CLLocationDegrees
+        let latDelta = 0.5 as CLLocationDegrees
+        let lonDelta = 0.5 as CLLocationDegrees
+        let center = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+        let span = MKCoordinateSpan(latitudeDelta: latDelta, longitudeDelta: lonDelta)
+        let region = MKCoordinateRegion(center: center, span: span)
+        mapView.setRegion(region, animated: true)
+        mapView.addAnnotation(pin)
     }
     
     override func viewDidLayoutSubviews() {
