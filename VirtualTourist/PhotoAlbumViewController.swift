@@ -179,7 +179,10 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
                     return
                 }
                 
-                photo.flickrImage = UIImage(data: imageData!)
+                self.sharedContext.performBlock({ () -> Void in
+                    photo.flickrImage = UIImage(data: imageData!)                    
+                })
+
                 
                 dispatch_sync(dispatch_get_main_queue()) {
                     //Make sure the cell is visible before loading the image. Otherwise whe it gets reused the image could be filled with the wrong photos
@@ -354,12 +357,15 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         
         newCollectionNetworkTask =  VTClient.sharedInstance.getPhotosFromFlick(Double(pin.latitude), lon: Double(pin.longitude), page: pin.currentPage) { (success, photoResults, pictureCount, errorString) -> Void in
             if success {
-                self.pin.totalPictureCount = pictureCount
-                for pic in photoResults! {
-                    let photo = Photo(imagePath: pic["url_m"] as! String, context: self.sharedContext)
+                
+                self.sharedContext.performBlock({ () -> Void in
                     self.pin.totalPictureCount = pictureCount
-                    photo.pin = self.pin
-                }
+                    for pic in photoResults! {
+                        let photo = Photo(imagePath: pic["url_m"] as! String, context: self.sharedContext)
+                        self.pin.totalPictureCount = pictureCount
+                        photo.pin = self.pin
+                    }
+                })
                 
                 self.sharedContext.performBlock({ () -> Void in
                     CoreDataStackManager.sharedInstance.saveContext()

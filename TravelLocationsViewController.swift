@@ -56,11 +56,14 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
         pinHasFinishedDownloadingURLS = false
         taskForURLDownload =  VTClient.sharedInstance.getPhotosFromFlick(latitude, lon: longitude, page: pin.currentPage) { (success, photoResults, pictureCount, errorString) -> Void in
             if success {
-                pin.totalPictureCount = pictureCount
-                for pic in photoResults! {
-                    let photo = Photo(imagePath: pic["url_m"] as! String, context: self.sharedContext)
-                    photo.pin = pin
-                }
+                
+                self.sharedContext.performBlock({ () -> Void in
+                    pin.totalPictureCount = pictureCount
+                    for pic in photoResults! {
+                        let photo = Photo(imagePath: pic["url_m"] as! String, context: self.sharedContext)
+                        photo.pin = pin
+                    }
+                })
                 
                 self.pinHasFinishedDownloadingURLS = true
                 
@@ -90,7 +93,10 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate {
                     return
                 }
                 
-                photo.flickrImage = UIImage(data: imageData!)
+                self.sharedContext.performBlock({ () -> Void in
+                    photo.flickrImage = UIImage(data: imageData!)
+                })
+
             })
             
             self.tasksForImageDataDownloads.append(task)
